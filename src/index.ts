@@ -8,8 +8,11 @@
 // Plugin
 //------------------------------------------------------------------------------
 import { ShellLanguage } from "./languages/shell-language.js";
+import noBackticks from "./rules/no-backticks.js";
 
-const rules = {};
+const rules = {
+	"no-backticks": noBackticks,
+};
 
 const plugin = {
 	meta: {
@@ -29,7 +32,9 @@ const plugin = {
 			files: ["**/*.sh", "**/*.bash"],
 			language: "shell/bash",
 			plugins: {},
-			rules: {},
+			rules: {
+				"shell/no-backticks": "error",
+			},
 		},
 	},
 };
