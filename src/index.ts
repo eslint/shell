@@ -13,6 +13,7 @@ import noBackticks from "./rules/no-backticks.js";
 import noExpansionsInSingleQuotes from "./rules/no-expansions-in-single-quotes.js";
 import noLsIteration from "./rules/no-ls-iteration.js";
 import noUnquotedExpansions from "./rules/no-unquoted-expansions.js";
+import noUnusedVars from "./rules/no-unused-vars.js";
 import noUselessCat from "./rules/no-useless-cat.js";
 import noUselessEcho from "./rules/no-useless-echo.js";
 import noVariablesInPrintfFormat from "./rules/no-variables-in-printf-format.js";
@@ -28,6 +29,7 @@ const rules = {
 	"no-expansions-in-single-quotes": noExpansionsInSingleQuotes,
 	"no-ls-iteration": noLsIteration,
 	"no-unquoted-expansions": noUnquotedExpansions,
+	"no-unused-vars": noUnusedVars,
 	"no-useless-cat": noUselessCat,
 	"no-useless-echo": noUselessEcho,
 	"no-variables-in-printf-format": noVariablesInPrintfFormat,
@@ -58,6 +60,7 @@ const plugin = {
 				"shell/no-expansions-in-single-quotes": "warn",
 				"shell/no-ls-iteration": "error",
 				"shell/no-unquoted-expansions": "error",
+				"shell/no-unused-vars": "error",
 				"shell/no-useless-cat": "error",
 				"shell/no-useless-echo": "error",
 				"shell/no-variables-in-printf-format": "error",
