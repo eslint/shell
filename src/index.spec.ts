@@ -42,7 +42,10 @@ describe("plugin", () => {
 	it("should expose all rules", () => {
 		const ruleIds = Object.keys(plugin.rules);
 
-		expect(ruleIds.sort()).toEqual(["no-backticks"]);
+		expect(ruleIds.sort()).toEqual([
+			"no-backticks",
+			"no-expansions-in-single-quotes",
+		]);
 	});
 
 	it("should give every rule meta docs and messages", () => {
