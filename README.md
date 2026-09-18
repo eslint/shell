@@ -93,6 +93,7 @@ Each rule mirrors a well-known ShellCheck check.
 | [`no-unquoted-expansions`](./docs/rules/no-unquoted-expansions.md)                 | SC2086/46  | Quote expansions subject to word splitting and globbing | ✅      | error       |
 | [`no-useless-cat`](./docs/rules/no-useless-cat.md)                                 | SC2002     | Don't pipe from a single-file `cat`                     |         | error       |
 | [`no-useless-echo`](./docs/rules/no-useless-echo.md)                               | SC2116     | Disallow `$(echo ...)`                                  |         | error       |
+| [`require-cd-guard`](./docs/rules/require-cd-guard.md)                             | SC2164     | Handle `cd` failure with `\|\| exit` (has suggestions)  |         | error       |
 | [`require-read-r`](./docs/rules/require-read-r.md)                                 | SC2162     | Use `read -r` so backslashes aren't mangled             | ✅      | error       |
 
 ## Configuration comments
