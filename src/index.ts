@@ -12,3 +12,5 @@ const plugin = {
 };
 
 export default plugin;
+export { parseBash, BashSyntaxError } from "./parser/parse.js";
+export type * from "./types.js";
