@@ -77,6 +77,7 @@ Each rule mirrors a well-known ShellCheck check.
 | ---------------------------------------------------------------------------------- | ---------- | ------------------------------------------------------- | ------- | ----------- |
 | [`no-backticks`](./docs/rules/no-backticks.md)                                     | SC2006     | Use `$(...)` instead of legacy backticks                | ✅      | error       |
 | [`no-expansions-in-single-quotes`](./docs/rules/no-expansions-in-single-quotes.md) | SC2016     | Expressions don't expand in single quotes               |         | warn        |
+| [`no-ls-iteration`](./docs/rules/no-ls-iteration.md)                               | SC2045     | Don't iterate over `ls` output; use globs               |         | error       |
 | [`no-unquoted-expansions`](./docs/rules/no-unquoted-expansions.md)                 | SC2086/46  | Quote expansions subject to word splitting and globbing | ✅      | error       |
 | [`no-useless-echo`](./docs/rules/no-useless-echo.md)                               | SC2116     | Disallow `$(echo ...)`                                  |         | error       |
 
