@@ -46,6 +46,7 @@ describe("plugin", () => {
 			"no-backticks",
 			"no-expansions-in-single-quotes",
 			"no-unquoted-expansions",
+			"no-useless-echo",
 		]);
 	});
 
