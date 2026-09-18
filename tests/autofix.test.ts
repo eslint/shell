@@ -41,4 +41,12 @@ describe("autofix", () => {
 
 		expect(result.output).toBe('cp "$src" "$dest"\n');
 	});
+
+	it("should add -r to read", () => {
+		const result = fix('read line\necho "$line"\n', {
+			"bash/require-read-r": "error",
+		});
+
+		expect(result.output).toBe('read -r line\necho "$line"\n');
+	});
 });
