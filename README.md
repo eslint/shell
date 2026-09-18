@@ -84,9 +84,10 @@ to override the dialect of the language you chose.
 
 Each rule mirrors a well-known ShellCheck check.
 
-| Rule                                           | ShellCheck | Description                              | Fixable | Recommended |
-| ---------------------------------------------- | ---------- | ---------------------------------------- | ------- | ----------- |
-| [`no-backticks`](./docs/rules/no-backticks.md) | SC2006     | Use `$(...)` instead of legacy backticks | ✅      | error       |
+| Rule                                                                               | ShellCheck | Description                               | Fixable | Recommended |
+| ---------------------------------------------------------------------------------- | ---------- | ----------------------------------------- | ------- | ----------- |
+| [`no-backticks`](./docs/rules/no-backticks.md)                                     | SC2006     | Use `$(...)` instead of legacy backticks  | ✅      | error       |
+| [`no-expansions-in-single-quotes`](./docs/rules/no-expansions-in-single-quotes.md) | SC2016     | Expressions don't expand in single quotes |         | warn        |
 
 ## Configuration comments
 
