@@ -3,14 +3,37 @@
  * ESLint, ShellCheck-inspired rules, and a recommended configuration.
  */
 
+import { ShellLanguage } from "./languages/shell-language.js";
+
+const rules = {};
+
 const plugin = {
 	meta: {
 		name: "@eslint/shell",
 		namespace: "shell",
 		version: "0.0.0", // x-release-please-version
 	},
+	languages: {
+		bash: new ShellLanguage(),
+	},
+	rules,
+	configs: {
+		recommended: {
+			name: "shell/recommended",
+			files: ["**/*.sh", "**/*.bash"],
+			language: "shell/bash",
+			plugins: {},
+			rules: {},
+		},
+	},
 };
 
+// The recommended config must reference the plugin itself.
+Object.assign(plugin.configs.recommended.plugins, { shell: plugin });
+
 export default plugin;
+export { ShellLanguage } from "./languages/shell-language.js";
+export { ShellSourceCode } from "./languages/shell-source-code.js";
 export { parseShell, ShellSyntaxError } from "./parser/parse.js";
+export { visitorKeys } from "./visitor-keys.js";
 export type * from "./types.js";

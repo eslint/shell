@@ -1,7 +1,15 @@
 /**
- * @fileoverview Type definitions for the shell ESTree-style syntax tree. See
- * docs/syntax-tree.md for the full documentation of the tree format.
+ * @fileoverview Type definitions for the shell ESTree-style syntax tree and
+ * for rules operating on it. See docs/syntax-tree.md for the full
+ * documentation of the tree format.
  */
+
+import type {
+	CustomRuleDefinitionType,
+	CustomRuleTypeDefinitions,
+	CustomRuleVisitorWithExit,
+} from "@eslint/plugin-kit";
+import type { ShellSourceCode } from "./languages/shell-source-code.js";
 
 //------------------------------------------------------------------------------
 // Base
@@ -436,3 +444,74 @@ export type ShellNode =
 //------------------------------------------------------------------------------
 
 export type ShellVariant = "bash" | "posix" | "mksh";
+
+export interface ShellLanguageOptions {
+	/** The shell dialect to parse. Defaults to `"bash"`. */
+	variant?: ShellVariant;
+
+	[key: string]: unknown;
+}
+
+//------------------------------------------------------------------------------
+// Rules
+//------------------------------------------------------------------------------
+
+/**
+ * Visitor object for shell rules. Keys are node types, optionally with an
+ * `:exit` suffix.
+ */
+export type ShellRuleVisitor = CustomRuleVisitorWithExit<{
+	Program?(node: ProgramNode): void;
+	Comment?(node: CommentNode): void;
+	Command?(node: CommandNode): void;
+	Pipeline?(node: PipelineNode): void;
+	LogicalExpression?(node: LogicalExpressionNode): void;
+	Subshell?(node: SubshellNode): void;
+	BlockStatement?(node: BlockStatementNode): void;
+	IfStatement?(node: IfStatementNode): void;
+	ElseClause?(node: ElseClauseNode): void;
+	WhileStatement?(node: WhileStatementNode): void;
+	UntilStatement?(node: UntilStatementNode): void;
+	ForStatement?(node: ForStatementNode): void;
+	ArithmeticForStatement?(node: ArithmeticForStatementNode): void;
+	CaseStatement?(node: CaseStatementNode): void;
+	CaseClause?(node: CaseClauseNode): void;
+	FunctionDeclaration?(node: FunctionDeclarationNode): void;
+	TestCommand?(node: TestCommandNode): void;
+	ArithmeticCommand?(node: ArithmeticCommandNode): void;
+	DeclarationCommand?(node: DeclarationCommandNode): void;
+	TimeCommand?(node: TimeCommandNode): void;
+	CoprocCommand?(node: CoprocCommandNode): void;
+	LetCommand?(node: LetCommandNode): void;
+	Word?(node: WordNode): void;
+	Literal?(node: LiteralNode): void;
+	SingleQuotedString?(node: SingleQuotedStringNode): void;
+	DoubleQuotedString?(node: DoubleQuotedStringNode): void;
+	ParameterExpansion?(node: ParameterExpansionNode): void;
+	CommandSubstitution?(node: CommandSubstitutionNode): void;
+	ProcessSubstitution?(node: ProcessSubstitutionNode): void;
+	ArithmeticExpansion?(node: ArithmeticExpansionNode): void;
+	ExtendedGlob?(node: ExtendedGlobNode): void;
+	VariableAssignment?(node: VariableAssignmentNode): void;
+	ArrayExpression?(node: ArrayExpressionNode): void;
+	ArrayElement?(node: ArrayElementNode): void;
+	Identifier?(node: IdentifierNode): void;
+	Redirect?(node: RedirectNode): void;
+	BinaryArithmetic?(node: BinaryArithmeticNode): void;
+	UnaryArithmetic?(node: UnaryArithmeticNode): void;
+	ParenthesizedArithmetic?(node: ParenthesizedArithmeticNode): void;
+	BinaryTest?(node: BinaryTestNode): void;
+	UnaryTest?(node: UnaryTestNode): void;
+	ParenthesizedTest?(node: ParenthesizedTestNode): void;
+}>;
+
+export type ShellRuleDefinitionTypeOptions = {
+	LangOptions: ShellLanguageOptions;
+	Code: ShellSourceCode;
+	Visitor: ShellRuleVisitor;
+	Node: ShellNode;
+};
+
+export type ShellRuleDefinition<
+	Options extends Partial<CustomRuleTypeDefinitions> = object,
+> = CustomRuleDefinitionType<ShellRuleDefinitionTypeOptions, Options>;

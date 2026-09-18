@@ -17,6 +17,49 @@ npm install --save-dev eslint @eslint/shell
 
 Requires Node.js `^20.19.0 || ^22.13.0 || >=24`. Tested with ESLint v10.
 
+## Usage
+
+Add the plugin to your `eslint.config.js`:
+
+```js
+import bash from "@eslint/bash";
+
+export default [
+	// use the recommended rules for *.sh and *.bash files
+	bash.configs.recommended,
+];
+```
+
+### Language options
+
+| Option    | Values                        | Default  | Description                |
+| --------- | ----------------------------- | -------- | -------------------------- |
+| `variant` | `"bash"`, `"posix"`, `"mksh"` | `"bash"` | The shell dialect to parse |
+
+```js
+export default [
+	{
+		files: ["**/*.sh"],
+		plugins: { bash },
+		language: "bash/bash",
+		languageOptions: { variant: "posix" },
+	},
+];
+```
+
+## Configuration comments
+
+Standard ESLint configuration comments work inside Bash files:
+
+```bash
+# eslint-disable-next-line bash/no-backticks
+echo `pwd`
+
+echo `pwd` # eslint-disable-line bash/no-backticks -- legacy
+
+# eslint bash/no-useless-echo: "warn"
+```
+
 ## Syntax tree
 
 The tree format is documented in [docs/syntax-tree.md](docs/syntax-tree.md).
