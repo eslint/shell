@@ -39,6 +39,7 @@ describe("plugin", () => {
 			"no-expansions-in-single-quotes",
 			"no-ls-iteration",
 			"no-unquoted-expansions",
+			"no-unused-vars",
 			"no-useless-cat",
 			"no-useless-echo",
 			"no-variables-in-printf-format",
