@@ -41,6 +41,7 @@ describe("plugin", () => {
 			"no-unquoted-expansions",
 			"no-useless-cat",
 			"no-useless-echo",
+			"require-cd-guard",
 			"require-read-r",
 		]);
 	});
