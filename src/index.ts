@@ -5,8 +5,16 @@
  */
 
 //------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
+
+import { ShellLanguage } from "./languages/shell-language.js";
+
+//------------------------------------------------------------------------------
 // Plugin
 //------------------------------------------------------------------------------
+
+const rules = {};
 
 const plugin = {
 	meta: {
@@ -14,12 +22,31 @@ const plugin = {
 		namespace: "shell",
 		version: "0.0.0", // x-release-please-version
 	},
+	languages: {
+		bash: new ShellLanguage(),
+	},
+	rules,
+	configs: {
+		recommended: {
+			name: "shell/recommended",
+			files: ["**/*.sh", "**/*.bash"],
+			language: "shell/bash",
+			plugins: {},
+			rules: {},
+		},
+	},
 };
+
+// The recommended config must reference the plugin itself.
+Object.assign(plugin.configs.recommended.plugins, { shell: plugin });
 
 //------------------------------------------------------------------------------
 // Exports
 //------------------------------------------------------------------------------
 
 export default plugin;
+export { ShellLanguage } from "./languages/shell-language.js";
+export { ShellSourceCode } from "./languages/shell-source-code.js";
 export { parseShell, ShellSyntaxError } from "./parser/parse.js";
+export { visitorKeys } from "./visitor-keys.js";
 export type * from "./types.js";
