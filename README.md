@@ -1,4 +1,4 @@
-# @eslint/bash
+# ESLint Bash Language Plugin
 
 A Bash language plugin for [ESLint](https://eslint.org), providing:
 
