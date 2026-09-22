@@ -40,6 +40,11 @@ jobs:
             - uses: actions/setup-node@v7
               with:
                   node-version: ${{ matrix.node }}
+              # npm 10.9 and 11.5 and earlier fail to resolve this peer
+              # dependency graph ("Cannot read properties of null (reading
+              # 'edgesOut')"), and npm 12 does not support all of the Node.js
+              # versions in this matrix, so pin to the latest npm 11.
+            - run: npm install -g npm@11
             - run: npm install
             - run: npm run build
             - run: npm test
