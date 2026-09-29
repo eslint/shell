@@ -4,7 +4,32 @@
  */
 
 import { getCommandName, getStaticText } from "./utils.js";
-import type { BashRuleDefinition } from "../types.js";
+import type { BashRuleDefinition, WordNode, WordPartNode } from "../types.js";
+
+function hasPotentialExpansion(word: WordNode): boolean {
+	const checkParts = (parts: WordPartNode[], quoted = false): boolean =>
+		parts.some(part => {
+			switch (part.type) {
+				case "Literal":
+					return (
+						!quoted &&
+						(part.value.includes("*") ||
+							part.value.includes("?") ||
+							part.value.includes("[") ||
+							part.value.includes("{") ||
+							part.value.includes("}"))
+					);
+				case "SingleQuotedString":
+					return part.dollar;
+				case "DoubleQuotedString":
+					return checkParts(part.parts, true);
+				default:
+					return false;
+			}
+		});
+
+	return checkParts(word.parts);
+}
 
 const rule: BashRuleDefinition<{ MessageIds: "uselessCat" }> = {
 	meta: {
@@ -39,8 +64,14 @@ const rule: BashRuleDefinition<{ MessageIds: "uselessCat" }> = {
 				const argument = first.arguments[0];
 				const text = argument ? getStaticText(argument) : null;
 
-				// Skip flags (e.g. `cat -n file`) and stdin markers.
-				if (text === null || text.startsWith("-")) {
+				// Skip flags, stdin markers, and arguments that can expand to
+				// multiple words.
+				if (
+					text === null ||
+					text.startsWith("-") ||
+					!argument ||
+					hasPotentialExpansion(argument)
+				) {
 					return;
 				}
 
