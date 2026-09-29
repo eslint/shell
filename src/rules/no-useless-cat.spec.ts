@@ -24,6 +24,13 @@ ruleTester.run("no-useless-cat", rule as never, {
 		"cat a.txt b.txt | sort",
 		// cat with flags changes output
 		"cat -n file.txt | head",
+		// Unquoted glob and brace patterns can expand to multiple files.
+		"cat *.txt | sort",
+		"cat {a,b} | sort",
+		"cat {1..3} | sort",
+		"cat {a,{b}} | sort",
+		// ANSI-C quoting can transform source text into an option.
+		"cat $'\\x2dn' | head",
 		// pipeline not starting with cat
 		"sort file.txt | uniq | cat",
 		// cat with redirect input
@@ -47,6 +54,14 @@ ruleTester.run("no-useless-cat", rule as never, {
 		},
 		{
 			code: "cat /var/log/syslog | tail -n 5 | grep error",
+			errors: [{ messageId: "uselessCat" }],
+		},
+		{
+			code: 'cat "*.txt" | sort',
+			errors: [{ messageId: "uselessCat" }],
+		},
+		{
+			code: "cat '{a,b}' | sort",
 			errors: [{ messageId: "uselessCat" }],
 		},
 	],
