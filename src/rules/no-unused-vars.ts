@@ -8,6 +8,7 @@ import type {
 	ArithmeticExpressionNode,
 	ShellRuleDefinition,
 	IdentifierNode,
+	TestExpressionNode,
 	WordNode,
 } from "../types.js";
 
@@ -25,11 +26,6 @@ const SPECIAL_VARIABLES = new Set([
 	"HOME",
 	"IFS",
 	"LANG",
-	"LC_ALL",
-	"LC_COLLATE",
-	"LC_CTYPE",
-	"LC_MESSAGES",
-	"LC_NUMERIC",
 	"LD_LIBRARY_PATH",
 	"OPTARG",
 	"OPTERR",
@@ -51,7 +47,20 @@ const SPECIAL_VARIABLES = new Set([
 const IDENTIFIER = /^[A-Za-z_][A-Za-z0-9_]*/u;
 
 /** `read` flags that consume the following word as their argument. */
-const READ_FLAGS_WITH_ARGUMENT = /^-[a-zA-Z]*[adinNptu]$/u;
+const READ_FLAGS_WITH_ARGUMENT = /^-[a-zA-Z]*[dinNptu]$/u;
+
+/** `mapfile`/`readarray` flags that consume the following word. */
+const MAPFILE_FLAGS_WITH_ARGUMENT = /^-[a-zA-Z]*[cCdnOsu]$/u;
+
+/** Test operators whose operands are evaluated arithmetically. */
+const ARITHMETIC_TEST_OPERATORS = new Set([
+	"-eq",
+	"-ne",
+	"-lt",
+	"-le",
+	"-gt",
+	"-ge",
+]);
 
 /** Arithmetic operators that assign to their left operand. */
 const ARITHMETIC_ASSIGNMENT = /^(?:=|\+=|-=|\*=|\/=|%=|<<=|>>=|&=|\^=|\|=)$/u;
@@ -175,6 +184,40 @@ const rule: ShellRuleDefinition<{
 			}
 		}
 
+		/**
+		 * Records reads for bare identifiers used as operands of arithmetic
+		 * comparisons in `[[ ... ]]`, such as `[[ x -gt 0 ]]`.
+		 */
+		function scanTest(expression: TestExpressionNode): void {
+			switch (expression.type) {
+				case "BinaryTest":
+					if (ARITHMETIC_TEST_OPERATORS.has(expression.operator)) {
+						for (const operand of [
+							expression.left,
+							expression.right,
+						]) {
+							if (operand.type === "Word") {
+								scanArithmetic(operand, false);
+							}
+						}
+					} else {
+						scanTest(expression.left);
+						scanTest(expression.right);
+					}
+					break;
+
+				case "UnaryTest":
+					scanTest(expression.argument);
+					break;
+
+				case "ParenthesizedTest":
+					scanTest(expression.expression);
+					break;
+
+				// no default
+			}
+		}
+
 		return {
 			VariableAssignment(node) {
 				if (node.name) {
@@ -194,11 +237,23 @@ const rule: ShellRuleDefinition<{
 				}
 			},
 
+			ArrayElement(node) {
+				if (node.index) {
+					scanArithmetic(node.index, false);
+				}
+			},
+
 			ParameterExpansion(node) {
 				reads.add(node.name);
 
-				if (node.index) {
-					scanArithmetic(node.index, false);
+				for (const expression of [
+					node.index,
+					node.sliceOffset,
+					node.sliceLength,
+				]) {
+					if (expression) {
+						scanArithmetic(expression, false);
+					}
 				}
 			},
 
@@ -206,6 +261,10 @@ const rule: ShellRuleDefinition<{
 				if (node.variable) {
 					addWrite(node.variable.name, node.variable);
 				}
+			},
+
+			TestCommand(node) {
+				scanTest(node.expression);
 			},
 
 			ArithmeticCommand(node) {
@@ -237,6 +296,7 @@ const rule: ShellRuleDefinition<{
 			DeclarationCommand(node) {
 				let exported = node.kind === "export";
 				let nameref = node.kind === "nameref";
+				let printed = false;
 
 				for (const argument of node.arguments) {
 					if (argument.type === "Word") {
@@ -247,8 +307,18 @@ const rule: ShellRuleDefinition<{
 								exported = true;
 							}
 
+							// `export -n` removes the export attribute
+							// rather than creating a nameref.
 							if (text.includes("n")) {
-								nameref = true;
+								if (node.kind === "export") {
+									exported = false;
+								} else {
+									nameref = true;
+								}
+							}
+
+							if (text.includes("p")) {
+								printed = true;
 							}
 						}
 					}
@@ -258,16 +328,22 @@ const rule: ShellRuleDefinition<{
 					unsafe = true;
 				}
 
-				if (!exported) {
-					return;
-				}
-
-				// Exported variables are visible to child processes, so
-				// consider them used.
 				for (const argument of node.arguments) {
 					if (
-						argument.type === "VariableAssignment" &&
-						argument.name
+						argument.type !== "VariableAssignment" ||
+						!argument.name
+					) {
+						continue;
+					}
+
+					// Exported variables are visible to child processes, so
+					// consider them used. Naming an existing variable in
+					// `readonly x` or `declare -p x` also references it.
+					if (
+						exported ||
+						(argument.value === null &&
+							argument.array === null &&
+							(node.kind === "readonly" || printed))
 					) {
 						reads.add(argument.name.name);
 					}
@@ -329,8 +405,11 @@ const rule: ShellRuleDefinition<{
 
 							if (text.startsWith("-")) {
 								skipNext =
-									name === "read" &&
-									READ_FLAGS_WITH_ARGUMENT.test(text);
+									name === "read"
+										? READ_FLAGS_WITH_ARGUMENT.test(text)
+										: MAPFILE_FLAGS_WITH_ARGUMENT.test(
+												text,
+											);
 								continue;
 							}
 
@@ -359,6 +438,7 @@ const rule: ShellRuleDefinition<{
 					if (
 						reads.has(name) ||
 						SPECIAL_VARIABLES.has(name) ||
+						name.startsWith("LC_") ||
 						allowedNames.has(name) ||
 						name.startsWith("_")
 					) {
