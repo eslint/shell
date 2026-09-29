@@ -4,6 +4,7 @@
  */
 
 import type { ShellRuleDefinition, WordNode } from "../types.js";
+import { startsWithCommand } from "./utils.js";
 
 /**
  * Parameters that always expand to values that cannot split, so quoting is
@@ -43,7 +44,7 @@ const rule: ShellRuleDefinition<{
 		// POSIX sh doesn't field-split redirection targets the way Bash does.
 		const splitsRedirects = context.languageOptions.variant !== "posix";
 
-		function checkWord(word: WordNode): void {
+		function checkWord(word: WordNode, isForWord = false): void {
 			for (const part of word.parts) {
 				if (
 					part.type !== "ParameterExpansion" &&
@@ -63,6 +64,10 @@ const rule: ShellRuleDefinition<{
 					word.parts.length === 1 &&
 					word.start === part.start &&
 					word.end === part.end;
+				const isLsIteration =
+					isForWord &&
+					part.type === "CommandSubstitution" &&
+					startsWithCommand(part.body, "ls");
 
 				context.report({
 					node: part,
@@ -74,13 +79,14 @@ const rule: ShellRuleDefinition<{
 						part.type === "ParameterExpansion"
 							? { expansion: sourceCode.getText(part) }
 							: {},
-					fix: isWholeWord
-						? fixer =>
-								fixer.replaceText(
-									word,
-									`"${sourceCode.getText(word)}"`,
-								)
-						: undefined,
+					fix:
+						isWholeWord && !isLsIteration
+							? fixer =>
+									fixer.replaceText(
+										word,
+										`"${sourceCode.getText(word)}"`,
+									)
+							: undefined,
 				});
 			}
 		}
@@ -98,7 +104,7 @@ const rule: ShellRuleDefinition<{
 
 			ForStatement(node) {
 				for (const word of node.words) {
-					checkWord(word);
+					checkWord(word, true);
 				}
 			},
 

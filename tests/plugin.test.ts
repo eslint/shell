@@ -157,4 +157,23 @@ describe("recommended configuration", () => {
 		expect(linter.verify(code, config, "script.sh")[0]?.fatal).toBe(true);
 		expect(linter.verify(code, config, "script.js")).toEqual([]);
 	});
+
+	it("should preserve ls iterations when autofixing", () => {
+		const code = 'for f in $(ls); do echo "$f"; done\n';
+		const linter = new Linter();
+		const result = linter.verifyAndFix(
+			code,
+			[bash.configs.recommended] as never,
+			"script.sh",
+		);
+
+		expect(result.output).toBe(code);
+		expect(result.fixed).toBe(false);
+		expect(result.messages.map(({ ruleId }) => ruleId)).toContain(
+			"bash/no-ls-iteration",
+		);
+		expect(result.messages.map(({ ruleId }) => ruleId)).toContain(
+			"bash/no-unquoted-expansions",
+		);
+	});
 });
