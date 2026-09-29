@@ -53,6 +53,24 @@ ruleTester.run("no-unused-vars", rule as never, {
 		"x=1\n: ${x:=2}",
 		// unset counts as a use
 		"x=1\nunset x",
+		// Array literal subscripts are arithmetic contexts
+		'i=0\narr=([i]=value)\necho "${arr[@]}"',
+		// Slice offsets and lengths are arithmetic contexts
+		'start=1\nlen=2\ns=abcdef\necho "${s:start:len}"',
+		// Subscripts inside arithmetic are read
+		"arr=(1 2)\ni=0\necho $(( arr[i] ))",
+		// Arithmetic comparisons in [[ ]] read bare names
+		"x=1\n[[ x -gt 0 ]] && echo big",
+		"x=1\ny=2\n[[ ! ( x -eq y ) ]] && echo diff",
+		// readonly and declare -p reference existing variables
+		"x=1\nreadonly x",
+		"x=1\ndeclare -p x",
+		// Any LC_* variable configures the locale
+		"LC_TIME=C",
+		// read -a assigns the named array
+		'read -r -a parts\necho "${parts[@]}"',
+		// mapfile -C takes a callback, not a variable name
+		'mapfile -t -C handler lines\necho "${lines[@]}"',
 	],
 	invalid: [
 		{
@@ -101,6 +119,33 @@ ruleTester.run("no-unused-vars", rule as never, {
 				{
 					messageId: "unusedVariable",
 					data: { name: "count" },
+				},
+			],
+		},
+		{
+			code: "read -r -a parts",
+			errors: [
+				{
+					messageId: "unusedVariable",
+					data: { name: "parts" },
+				},
+			],
+		},
+		{
+			code: "x=1\nexport -n x",
+			errors: [
+				{
+					messageId: "unusedVariable",
+					data: { name: "x" },
+				},
+			],
+		},
+		{
+			code: "x=1\n[[ x == 1 ]] && echo one",
+			errors: [
+				{
+					messageId: "unusedVariable",
+					data: { name: "x" },
 				},
 			],
 		},

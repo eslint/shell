@@ -20,8 +20,8 @@ A variable counts as assigned by:
 A variable counts as used when:
 
 - it is expanded with `$name` or `${...}`;
-- it appears by name in arithmetic, as in `$((count + 1))`;
-- it is passed to `unset`, `export`, or `readonly`;
+- it appears by name in an arithmetic context, as in `$((count + 1))`, an array subscript such as `arr[i]=x` or `arr=([i]=x)`, a slice such as `${str:start:len}`, or an arithmetic comparison such as `[[ count -gt 0 ]]`;
+- it is passed to `unset`, `export`, `readonly`, or `declare -p`;
 - it is exported, with `export` or `declare -x`;
 - it is assigned as an environment prefix to a command, as in `LC_ALL=C sort`.
 
