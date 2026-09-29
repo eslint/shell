@@ -23,6 +23,7 @@ ruleTester.run("no-useless-echo", rule as never, {
 		"x=$(echo foo | tr a-z A-Z)",
 		"x=$(echo foo; echo bar)",
 		"x=$(echo foo > file)",
+		"x=$(! echo foo)",
 	],
 	invalid: [
 		{
