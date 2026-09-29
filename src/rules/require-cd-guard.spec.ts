@@ -21,6 +21,8 @@ ruleTester.run("require-cd-guard", rule as never, {
 		"cd /tmp || exit",
 		"cd /tmp || return",
 		"cd /tmp && make",
+		"precheck && cd /tmp && make",
+		"precheck || cd /tmp || make",
 		"if cd /tmp; then make; fi",
 		"while cd /tmp; do break; done",
 		"! cd /tmp",
