@@ -91,6 +91,25 @@ export function isCommandNamed(
 }
 
 /**
+ * Determines whether a command substitution starts with a command of the given
+ * name.
+ */
+export function startsWithCommand(
+	body: StatementNode[],
+	name: string,
+): boolean {
+	const first = body[0];
+
+	if (!first) {
+		return false;
+	}
+
+	const firstCommand = first.type === "Pipeline" ? first.commands[0] : first;
+
+	return firstCommand !== undefined && isCommandNamed(firstCommand, name);
+}
+
+/**
  * Returns the expansions that make up a word, including those nested inside
  * double quotes when `includeQuoted` is `true`. Expansions nested inside
  * another expansion, such as `$b` in `${a:-$b}`, are not returned.
