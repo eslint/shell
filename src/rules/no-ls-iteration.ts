@@ -1,29 +1,10 @@
 /**
  * @fileoverview Rule to disallow iterating over `ls` output.
- * Mirrors ShellCheck SC2045/SC2012.
+ * Mirrors ShellCheck SC2045.
  */
 
-import { isCommandNamed } from "./utils.js";
-import type { BashRuleDefinition, StatementNode } from "../types.js";
-
-/**
- * Determines whether a command substitution body starts with `ls`.
- */
-function startsWithLs(body: StatementNode[]): boolean {
-	const first = body[0];
-
-	if (!first) {
-		return false;
-	}
-
-	if (first.type === "Pipeline") {
-		const firstCommand = first.commands[0];
-
-		return firstCommand !== undefined && isCommandNamed(firstCommand, "ls");
-	}
-
-	return isCommandNamed(first, "ls");
-}
+import { startsWithCommand } from "./utils.js";
+import type { BashRuleDefinition } from "../types.js";
 
 const rule: BashRuleDefinition<{ MessageIds: "lsIteration" }> = {
 	meta: {
@@ -48,7 +29,7 @@ const rule: BashRuleDefinition<{ MessageIds: "lsIteration" }> = {
 					for (const part of word.parts) {
 						if (
 							part.type === "CommandSubstitution" &&
-							startsWithLs(part.body)
+							startsWithCommand(part.body, "ls")
 						) {
 							context.report({
 								node: part,
