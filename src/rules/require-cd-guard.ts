@@ -4,7 +4,7 @@
  */
 
 import { getCommandName } from "./utils.js";
-import type { ShellRuleDefinition } from "../types.js";
+import type { ShellRuleDefinition, StatementNode } from "../types.js";
 
 const rule: ShellRuleDefinition<{
 	MessageIds: "uncheckedCd" | "addGuard";
@@ -40,17 +40,21 @@ const rule: ShellRuleDefinition<{
 					return;
 				}
 
-				const parent = sourceCode.getParent(node);
+				let expression: StatementNode = node;
+				let parent = sourceCode.getParent(expression);
 
-				if (parent) {
-					// The left side of `&&`/`||` has its status checked.
-					if (
-						parent.type === "LogicalExpression" &&
-						parent.left === node
-					) {
+				while (parent?.type === "LogicalExpression") {
+					// A failed command can propagate through a left-associative
+					// chain to an expression whose status is checked.
+					if (parent.left === expression) {
 						return;
 					}
 
+					expression = parent;
+					parent = sourceCode.getParent(expression);
+				}
+
+				if (parent) {
 					// `if cd ...`, `while cd ...`, `until cd ...`
 					if (
 						(parent.type === "IfStatement" ||
