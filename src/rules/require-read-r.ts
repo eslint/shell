@@ -6,6 +6,8 @@
 import { getCommandName, getStaticText } from "./utils.js";
 import type { ShellRuleDefinition } from "../types.js";
 
+const optionsWithArguments = new Set(["a", "d", "i", "n", "N", "p", "t", "u"]);
+
 const rule: ShellRuleDefinition<{ MessageIds: "missingR" }> = {
 	meta: {
 		type: "problem",
@@ -29,16 +31,58 @@ const rule: ShellRuleDefinition<{ MessageIds: "missingR" }> = {
 					return;
 				}
 
-				for (const argument of node.arguments) {
-					const text = getStaticText(argument);
+				let hasRawOption = false;
 
+				for (let index = 0; index < node.arguments.length; index++) {
+					const argument = node.arguments[index];
+					if (!argument) {
+						continue;
+					}
+
+					const text = getStaticText(argument);
 					if (text === "--") {
 						break;
 					}
 
-					if (text !== null && /^-[a-zA-Z]*r/u.test(text)) {
-						return;
+					if (
+						text === null ||
+						!text.startsWith("-") ||
+						text === "-"
+					) {
+						continue;
 					}
+
+					for (
+						let optionIndex = 1;
+						optionIndex < text.length;
+						optionIndex++
+					) {
+						const option = text[optionIndex];
+						if (!option) {
+							break;
+						}
+
+						if (option === "r") {
+							hasRawOption = true;
+							break;
+						}
+
+						if (optionsWithArguments.has(option)) {
+							if (optionIndex === text.length - 1) {
+								index++;
+							}
+
+							break;
+						}
+					}
+
+					if (hasRawOption) {
+						break;
+					}
+				}
+
+				if (hasRawOption) {
+					return;
 				}
 
 				const name = node.name;

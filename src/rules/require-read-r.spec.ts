@@ -44,6 +44,16 @@ ruleTester.run("require-read-r", rule as never, {
 			errors: [{ messageId: "missingR" }],
 		},
 		{
+			code: "read -d -r value",
+			output: "read -r -d -r value",
+			errors: [{ messageId: "missingR" }],
+		},
+		{
+			code: "read -dr value",
+			output: "read -r -dr value",
+			errors: [{ messageId: "missingR" }],
+		},
+		{
 			code: 'while read line; do echo "$line"; done < file',
 			output: 'while read -r line; do echo "$line"; done < file',
 			errors: [{ messageId: "missingR" }],
