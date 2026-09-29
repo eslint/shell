@@ -40,8 +40,11 @@ const rule: BashRuleDefinition<{ MessageIds: "variableInFormat" }> = {
 				} else if (first !== null && first.startsWith("-v")) {
 					// `printf -vvar format ...`
 					formatIndex = 1;
-				} else if (first === "--") {
-					formatIndex = 1;
+				}
+
+				const possibleFormat = node.arguments[formatIndex];
+				if (possibleFormat && getStaticText(possibleFormat) === "--") {
+					formatIndex++;
 				}
 
 				const format = node.arguments[formatIndex];

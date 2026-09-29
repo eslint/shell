@@ -21,6 +21,9 @@ ruleTester.run("no-variables-in-printf-format", rule as never, {
 		'printf "%s\\n" "$var"',
 		'printf \'%s: %d\\n\' "$name" "$count"',
 		'printf -v result "%s" "$var"',
+		'printf -v result -- "%s" "$var"',
+		'printf -vresult -- "%s" "$var"',
+		'printf -- "%s" "$var"',
 		'printf "static text\\n"',
 		// Not printf
 		'echo "$var"',
@@ -47,6 +50,18 @@ ruleTester.run("no-variables-in-printf-format", rule as never, {
 		},
 		{
 			code: 'printf -v out "$fmt" x',
+			errors: [{ messageId: "variableInFormat" }],
+		},
+		{
+			code: 'printf -v out -- "$fmt" x',
+			errors: [{ messageId: "variableInFormat" }],
+		},
+		{
+			code: 'printf -vout -- "$fmt" x',
+			errors: [{ messageId: "variableInFormat" }],
+		},
+		{
+			code: 'printf -- "$fmt" x',
 			errors: [{ messageId: "variableInFormat" }],
 		},
 		{

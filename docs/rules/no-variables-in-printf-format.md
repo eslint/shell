@@ -8,7 +8,7 @@ The first argument to `printf` is a format string: `%` starts a conversion and `
 
 ## Rule Details
 
-This rule warns when the format argument of `printf` contains a parameter expansion or command substitution, whether or not it's quoted. The format is the first argument, or the argument after `-v name`, `-vname`, or `--`.
+This rule warns when the format argument of `printf` contains a parameter expansion or command substitution, whether or not it's quoted. The format is the first argument after an optional `-v name` or `-vname` and an optional `--`.
 
 Variables in the arguments after the format are fine. Arithmetic expansions such as `$((...))` in the format are not checked.
 
