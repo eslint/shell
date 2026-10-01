@@ -8,7 +8,7 @@ Inside single quotes, Bash treats every character literally. Variables, command 
 
 ## Rule Details
 
-This rule warns when a single-quoted string contains text that looks like an expansion: `$name`, `${...}`, `$(...)`, or a pair of backticks.
+This rule warns when a single-quoted string contains text that looks like an expansion: `$name`, `${...}`, `$(...)`, or text wrapped in a pair of backticks.
 
 The rule does not warn about:
 
