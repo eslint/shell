@@ -50,6 +50,7 @@ ruleTester.run("no-unquoted-expansions", rule as never, {
 			errors: [
 				{
 					messageId: "unquotedParameterExpansion",
+					data: { expansion: "$var" },
 					line: 1,
 					column: 6,
 					endColumn: 10,
@@ -60,6 +61,27 @@ ruleTester.run("no-unquoted-expansions", rule as never, {
 			code: "echo ${var}",
 			output: 'echo "${var}"',
 			errors: [{ messageId: "unquotedParameterExpansion" }],
+		},
+		{
+			// The message quotes the expansion as written
+			code: "echo ${arr[@]}",
+			output: 'echo "${arr[@]}"',
+			errors: [
+				{
+					messageId: "unquotedParameterExpansion",
+					data: { expansion: "${arr[@]}" },
+				},
+			],
+		},
+		{
+			code: "echo ${var:-default}",
+			output: 'echo "${var:-default}"',
+			errors: [
+				{
+					messageId: "unquotedParameterExpansion",
+					data: { expansion: "${var:-default}" },
+				},
+			],
 		},
 		{
 			code: "echo $@",
