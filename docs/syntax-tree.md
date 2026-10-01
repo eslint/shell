@@ -250,7 +250,7 @@ interface CaseClause extends BashNodeBase {
 	type: "CaseClause";
 	patterns: Word[];
 	body: Statement[];
-	terminator: string | null; // ";;", ";&", ";;&", or null before `esac`
+	terminator: string | null; // ";;", ";&", ";;&", ";|" (mksh), or null before `esac`
 }
 ```
 
