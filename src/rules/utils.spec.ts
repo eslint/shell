@@ -45,6 +45,20 @@ describe("getStaticText", () => {
 		);
 	});
 
+	it("should return the text of dollar-quoted strings without escapes", () => {
+		expect(getStaticText(firstArgument("echo $'foo bar'\n"))).toBe(
+			"foo bar",
+		);
+	});
+
+	it("should return null for dollar-quoted strings with escapes", () => {
+		expect(getStaticText(firstArgument("echo $'e\\x63ho'\n"))).toBeNull();
+	});
+
+	it("should return null for locale-translated strings", () => {
+		expect(getStaticText(firstArgument('echo $"foo"\n'))).toBeNull();
+	});
+
 	it("should return null for words with expansions", () => {
 		expect(getStaticText(firstArgument("echo $var\n"))).toBeNull();
 		expect(getStaticText(firstArgument('echo "x$var"\n'))).toBeNull();
@@ -55,6 +69,10 @@ describe("getStaticText", () => {
 describe("getCommandName", () => {
 	it("should return the static command name", () => {
 		expect(getCommandName(firstCommand("echo hi\n"))).toBe("echo");
+	});
+
+	it("should return null for names that need unescaping", () => {
+		expect(getCommandName(firstCommand("$'e\\x63ho' hi\n"))).toBeNull();
 	});
 
 	it("should return null for dynamic names", () => {
@@ -86,6 +104,13 @@ describe("getExpansions", () => {
 		expect(expansions).toHaveLength(2);
 		expect(expansions[0]?.type).toBe("ParameterExpansion");
 		expect(expansions[1]?.type).toBe("CommandSubstitution");
+	});
+
+	it("should not return expansions nested inside other expansions", () => {
+		const expansions = getExpansions(firstArgument("echo ${a:-$b}\n"));
+
+		expect(expansions).toHaveLength(1);
+		expect(expansions[0]).toMatchObject({ name: "a" });
 	});
 
 	it("should skip quoted expansions by default", () => {
