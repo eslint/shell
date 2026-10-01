@@ -38,6 +38,7 @@ const PROCESS_SUBSTITUTION_OPERATOR = /^[<>]\(/u;
 const EXTENDED_GLOB_OPERATOR = /^[?*+@!]\(/u;
 const BINARY_COMMAND_OPERATOR = /^(?:\|&|\|\||&&|\|)/u;
 const CASE_TERMINATOR = /^(?:;;&|;;|;&|;\|)/u;
+const LEADING_TRIVIA = /^(?:\s|#.*)*/u;
 // eslint-disable-next-line no-control-regex -- intentionally matches the full ASCII range.
 const NON_ASCII = /[^\x00-\x7f]/u;
 
@@ -54,11 +55,15 @@ export class BashSyntaxError extends SyntaxError {
 	line: number;
 	column: number;
 
-	constructor(message: string, line: number, column: number) {
+	/** The file path passed to the parser, when there was one. */
+	path: string | undefined;
+
+	constructor(message: string, line: number, column: number, path?: string) {
 		super(message);
 		this.name = "BashSyntaxError";
 		this.line = line;
 		this.column = column;
+		this.path = path;
 	}
 }
 
@@ -66,7 +71,7 @@ export interface BashParseOptions {
 	/** The shell dialect to parse. Defaults to `"bash"`. */
 	variant?: BashShellVariant;
 
-	/** The file path reported in syntax errors. */
+	/** The file path reported as `BashSyntaxError#path` on syntax errors. */
 	path?: string;
 }
 
@@ -159,12 +164,12 @@ class Translator {
 	/**
 	 * Extracts the operator token that appears between two child nodes,
 	 * e.g. the `&&` in `a && b`. Skips surrounding whitespace and any
-	 * trailing comment.
+	 * comments on either side of the operator.
 	 */
 	#operatorBetween(left: MvdanNode, right: MvdanNode): string {
 		const slice = this.#text
 			.slice(this.#end(left), this.#start(right))
-			.trim();
+			.replace(LEADING_TRIVIA, "");
 
 		return slice.split(/\s+/u)[0] as string;
 	}
@@ -1009,6 +1014,7 @@ export function parseBash(
 				parseError.Text || parseError.Error(),
 				line,
 				column,
+				options.path,
 			);
 		}
 
