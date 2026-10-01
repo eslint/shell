@@ -29,7 +29,7 @@ const rule: ShellRuleDefinition<{
 		schema: [],
 		messages: {
 			unquotedParameterExpansion:
-				'Double quote "${{name}}" to prevent word splitting and globbing. (ShellCheck SC2086)',
+				'Double quote "{{expansion}}" to prevent word splitting and globbing. (ShellCheck SC2086)',
 			unquotedCommandSubstitution:
 				"Quote this command substitution to prevent word splitting. (ShellCheck SC2046)",
 		},
@@ -67,7 +67,7 @@ const rule: ShellRuleDefinition<{
 							: "unquotedCommandSubstitution",
 					data:
 						part.type === "ParameterExpansion"
-							? { name: part.name }
+							? { expansion: sourceCode.getText(part) }
 							: {},
 					fix: isWholeWord
 						? fixer =>
