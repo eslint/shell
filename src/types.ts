@@ -462,7 +462,6 @@ export interface ShellLanguageOptions {
  */
 export type ShellRuleVisitor = CustomRuleVisitorWithExit<{
 	Program?(node: ProgramNode): void;
-	Comment?(node: CommentNode): void;
 	Command?(node: CommandNode): void;
 	Pipeline?(node: PipelineNode): void;
 	LogicalExpression?(node: LogicalExpressionNode): void;
