@@ -15,6 +15,10 @@ import type {
  * Returns the plain text of a word when it is fully static (made up only of
  * literals and quoted literals), or `null` when the word contains
  * expansions. Quotes are removed from the result.
+ *
+ * Strings whose runtime text can differ from their source text are not
+ * static: `$'...'` strings containing escapes, which are not decoded, and
+ * locale-translated `$"..."` strings.
  */
 export function getStaticText(word: WordNode): string | null {
 	let result = "";
@@ -38,9 +42,13 @@ function getStaticPartText(part: WordPartNode): string | null {
 			return part.value;
 
 		case "SingleQuotedString":
-			return part.value;
+			return part.dollar && part.value.includes("\\") ? null : part.value;
 
 		case "DoubleQuotedString": {
+			if (part.dollar) {
+				return null;
+			}
+
 			let result = "";
 
 			for (const inner of part.parts) {
@@ -83,8 +91,9 @@ export function isCommandNamed(
 }
 
 /**
- * Returns all expansions in a word, including those nested inside double
- * quotes when `includeQuoted` is `true`.
+ * Returns the expansions that make up a word, including those nested inside
+ * double quotes when `includeQuoted` is `true`. Expansions nested inside
+ * another expansion, such as `$b` in `${a:-$b}`, are not returned.
  */
 export function getExpansions(
 	word: WordNode,
