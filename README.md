@@ -1,8 +1,8 @@
-# ESLint Bash Language Plugin
+# ESLint Shell Language Plugin
 
-A Bash language plugin for [ESLint](https://eslint.org), providing:
+A shell language plugin for [ESLint](https://eslint.org), providing:
 
-- an ESLint-style **parser** for Bash (wrapping
+- an ESLint-style **parser** for shell scripts (wrapping
   [mvdan-sh](https://www.npmjs.com/package/mvdan-sh), the parser behind
   `shfmt`) that produces an ESTree-style syntax tree,
 - an ESLint **language** implementation so rules can traverse that tree,
@@ -12,7 +12,7 @@ A Bash language plugin for [ESLint](https://eslint.org), providing:
 ## Installation
 
 ```bash
-npm install --save-dev eslint @eslint/bash
+npm install --save-dev eslint @eslint/shell
 ```
 
 Requires Node.js `^20.19.0 || ^22.13.0 || >=24`. Tested with ESLint v10.
