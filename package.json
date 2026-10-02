@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eslint/bash.git"
+    "url": "git+https://github.com/eslint/shell.git"
   },
   "keywords": [
     "eslint",
