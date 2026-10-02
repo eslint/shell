@@ -26,33 +26,31 @@ describe("ShellLanguage", () => {
 			expect(language.columnStart).toBe(1);
 			expect(language.nodeTypeKey).toBe("type");
 			expect(language.visitorKeys).toHaveProperty("Program");
-			expect(language.defaultLanguageOptions).toEqual({
-				variant: "bash",
-			});
+			expect(language.defaultLanguageOptions).toEqual({});
+		});
+	});
+
+	describe("constructor", () => {
+		it("should accept valid modes", () => {
+			expect(() => new ShellLanguage({ mode: "bash" })).not.toThrow();
+			expect(() => new ShellLanguage({ mode: "posix" })).not.toThrow();
+			expect(() => new ShellLanguage({ mode: "mksh" })).not.toThrow();
+		});
+
+		it("should reject unknown modes", () => {
+			expect(
+				() =>
+					new ShellLanguage({
+						// @ts-expect-error -- testing invalid input
+						mode: "fish",
+					}),
+			).toThrow(TypeError);
 		});
 	});
 
 	describe("validateLanguageOptions", () => {
-		it("should accept valid variants", () => {
-			expect(() =>
-				language.validateLanguageOptions({ variant: "bash" }),
-			).not.toThrow();
-			expect(() =>
-				language.validateLanguageOptions({ variant: "posix" }),
-			).not.toThrow();
-			expect(() =>
-				language.validateLanguageOptions({ variant: "mksh" }),
-			).not.toThrow();
+		it("should accept empty language options", () => {
 			expect(() => language.validateLanguageOptions({})).not.toThrow();
-		});
-
-		it("should reject unknown variants", () => {
-			expect(() =>
-				language.validateLanguageOptions({
-					// @ts-expect-error -- testing invalid input
-					variant: "fish",
-				}),
-			).toThrow(TypeError);
 		});
 	});
 
@@ -80,20 +78,29 @@ describe("ShellLanguage", () => {
 			}
 		});
 
-		it("should respect the variant language option", () => {
-			const posixResult = language.parse(
+		it("should parse Bash syntax by default", () => {
+			const result = language.parse(
 				createFile("diff <(sort a) <(sort b)\n"),
-				{ languageOptions: { variant: "posix" } },
 			);
 
-			expect(posixResult.ok).toBe(false);
+			expect(result.ok).toBe(true);
+		});
 
-			const bashResult = language.parse(
+		it("should reject Bash-only syntax in posix mode", () => {
+			const result = new ShellLanguage({ mode: "posix" }).parse(
 				createFile("diff <(sort a) <(sort b)\n"),
-				{ languageOptions: { variant: "bash" } },
 			);
 
-			expect(bashResult.ok).toBe(true);
+			expect(result.ok).toBe(false);
+		});
+
+		it("should accept mksh-only syntax in mksh mode", () => {
+			const code = "case $x in a) echo a ;| b) echo b ;; esac\n";
+
+			expect(language.parse(createFile(code)).ok).toBe(false);
+			expect(
+				new ShellLanguage({ mode: "mksh" }).parse(createFile(code)).ok,
+			).toBe(true);
 		});
 	});
 

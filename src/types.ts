@@ -446,10 +446,11 @@ export type ShellNode =
 
 export type ShellVariant = "bash" | "posix" | "mksh";
 
+/**
+ * Language options. There are none yet: the shell dialect is chosen by the
+ * language (`shell/bash`, `shell/posix`, or `shell/mksh`).
+ */
 export interface ShellLanguageOptions {
-	/** The shell dialect to parse. Defaults to `"bash"`. */
-	variant?: ShellVariant;
-
 	[key: string]: unknown;
 }
 

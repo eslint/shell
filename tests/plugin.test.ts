@@ -11,7 +11,7 @@ import testPlugin from "./fixtures/test-plugin.js";
 function lint(
 	code: string,
 	rules: Record<string, unknown> = {},
-	languageOptions?: Record<string, unknown>,
+	language = "shell/bash",
 ): Linter.LintMessage[] {
 	const linter = new Linter();
 
@@ -21,9 +21,8 @@ function lint(
 			{
 				files: ["**/*.sh"],
 				plugins: { shell, test: testPlugin },
-				language: "shell/bash",
+				language,
 				rules: rules as never,
-				...(languageOptions ? { languageOptions } : {}),
 			},
 		] as never,
 		"script.sh",
@@ -90,15 +89,20 @@ describe("language integration", () => {
 		});
 	});
 
-	it("should respect the variant language option", () => {
+	it("should parse each language as its own shell dialect", () => {
 		const code = "diff <(sort a) <(sort b)\n";
 
 		expect(lint(code)).toEqual([]);
 
-		const posixMessages = lint(code, {}, { variant: "posix" });
+		const posixMessages = lint(code, {}, "shell/posix");
 
 		expect(posixMessages).toHaveLength(1);
 		expect(posixMessages[0]?.fatal).toBe(true);
+
+		const mkshCode = "case $x in a) echo a ;| b) echo b ;; esac\n";
+
+		expect(lint(mkshCode, {}, "shell/mksh")).toEqual([]);
+		expect(lint(mkshCode)[0]?.fatal).toBe(true);
 	});
 });
 

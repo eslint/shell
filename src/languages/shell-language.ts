@@ -3,31 +3,32 @@
  * for shell scripts.
  */
 
-import type {
-	File,
-	Language,
-	LanguageContext,
-	OkParseResult,
-	ParseResult,
-} from "@eslint/core";
+import type { File, Language, OkParseResult, ParseResult } from "@eslint/core";
 import { ShellSyntaxError, parseShell } from "../parser/parse.js";
 import { ShellSourceCode } from "./shell-source-code.js";
 import { visitorKeys } from "../visitor-keys.js";
 import type {
 	ShellLanguageOptions,
 	ShellNode,
+	ShellVariant,
 	CommentNode,
 	ProgramNode,
 } from "../types.js";
 
-const SHELL_VARIANTS = new Set(["bash", "posix", "mksh"]);
+const SHELL_MODES = new Set(["bash", "posix", "mksh"]);
+
+export interface ShellLanguageConstructorOptions {
+	/** The shell dialect to parse. Defaults to `"bash"`. */
+	mode?: ShellVariant;
+}
 
 export type ShellOkParseResult = OkParseResult<ProgramNode> & {
 	comments: CommentNode[];
 };
 
 /**
- * ESLint Language implementation for shell scripts.
+ * ESLint Language implementation for shell scripts. Each instance parses
+ * one shell dialect, chosen by the `mode` constructor option.
  */
 export class ShellLanguage implements Language<{
 	LangOptions: ShellLanguageOptions;
@@ -41,30 +42,30 @@ export class ShellLanguage implements Language<{
 	nodeTypeKey = "type";
 	visitorKeys = visitorKeys;
 
-	defaultLanguageOptions: ShellLanguageOptions = {
-		variant: "bash",
-	};
+	defaultLanguageOptions: ShellLanguageOptions = {};
 
-	validateLanguageOptions(languageOptions: ShellLanguageOptions): void {
-		if (
-			languageOptions.variant !== undefined &&
-			!SHELL_VARIANTS.has(languageOptions.variant as string)
-		) {
+	#mode: ShellVariant;
+
+	constructor({ mode = "bash" }: ShellLanguageConstructorOptions = {}) {
+		if (!SHELL_MODES.has(mode)) {
 			throw new TypeError(
-				`Invalid shell variant "${String(languageOptions.variant)}". Expected "bash", "posix", or "mksh".`,
+				`Invalid shell mode "${String(mode)}". Expected "bash", "posix", or "mksh".`,
 			);
 		}
+
+		this.#mode = mode;
 	}
 
-	parse(
-		file: File,
-		context?: LanguageContext<ShellLanguageOptions>,
-	): ParseResult<ProgramNode> {
+	validateLanguageOptions(): void {
+		// There are no language options to validate.
+	}
+
+	parse(file: File): ParseResult<ProgramNode> {
 		const text = file.body as string;
 
 		try {
 			const { ast, comments } = parseShell(text, {
-				variant: context?.languageOptions?.variant,
+				variant: this.#mode,
 				path: file.path,
 			});
 

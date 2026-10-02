@@ -30,19 +30,22 @@ export default [
 ];
 ```
 
-### Language options
+### Languages
 
-| Option    | Values                        | Default  | Description                |
-| --------- | ----------------------------- | -------- | -------------------------- |
-| `variant` | `"bash"`, `"posix"`, `"mksh"` | `"bash"` | The shell dialect to parse |
+The plugin provides one language per shell dialect:
+
+| Language      | Description                           |
+| ------------- | ------------------------------------- |
+| `shell/bash`  | Bash. Used by the recommended config. |
+| `shell/posix` | POSIX `sh`, without Bash extensions.  |
+| `shell/mksh`  | MirBSD Korn shell.                    |
 
 ```js
 export default [
 	{
 		files: ["**/*.sh"],
 		plugins: { shell },
-		language: "shell/bash",
-		languageOptions: { variant: "posix" },
+		language: "shell/posix",
 	},
 ];
 ```

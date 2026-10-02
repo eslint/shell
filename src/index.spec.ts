@@ -27,8 +27,16 @@ describe("plugin", () => {
 		expect(() => parseShell("if then fi\n")).toThrow(ShellSyntaxError);
 	});
 
-	it("should expose the bash language", () => {
-		expect(plugin.languages.bash).toBeInstanceOf(ShellLanguage);
+	it("should expose one language per shell dialect", () => {
+		expect(Object.keys(plugin.languages).sort()).toEqual([
+			"bash",
+			"mksh",
+			"posix",
+		]);
+
+		for (const language of Object.values(plugin.languages)) {
+			expect(language).toBeInstanceOf(ShellLanguage);
+		}
 	});
 
 	it("should expose all rules", () => {
