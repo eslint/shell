@@ -15,10 +15,12 @@ const EXPANSION_LIKE = /\$[A-Za-z_{(]|`[^`]+`/u;
 const rule: BashRuleDefinition<{ MessageIds: "expansionInSingleQuotes" }> = {
 	meta: {
 		type: "suggestion",
+		languages: ["shell/bash"],
 		docs: {
 			description:
 				"Disallow expansion-like syntax inside single quotes, where it is not expanded",
 			recommended: true,
+			dialects: ["Bash", "POSIX sh", "mksh"],
 			url: "https://github.com/eslint/bash/blob/main/docs/rules/no-expansions-in-single-quotes.md",
 		},
 		schema: [],
