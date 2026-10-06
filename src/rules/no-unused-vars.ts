@@ -71,9 +71,11 @@ const rule: BashRuleDefinition<{
 }> = {
 	meta: {
 		type: "problem",
+		languages: ["shell/bash"],
 		docs: {
 			description: "Disallow variables that are assigned but never used",
 			recommended: true,
+			dialects: ["Bash", "POSIX sh", "mksh"],
 			url: "https://github.com/eslint/bash/blob/main/docs/rules/no-unused-vars.md",
 		},
 		schema: [
