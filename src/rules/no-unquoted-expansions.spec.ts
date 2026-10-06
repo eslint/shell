@@ -43,6 +43,15 @@ ruleTester.run("no-unquoted-expansions", rule as never, {
 		"echo $((x + 1))",
 		// Heredoc delimiters and herestrings
 		"cat <<< $var",
+		// POSIX sh doesn't word-split redirection targets
+		{
+			code: "cat > $out",
+			languageOptions: { variant: "posix" },
+		},
+		{
+			code: "cat < $(pwd)/in",
+			languageOptions: { variant: "posix" },
+		},
 	],
 	invalid: [
 		{
@@ -119,6 +128,19 @@ ruleTester.run("no-unquoted-expansions", rule as never, {
 		{
 			code: "cat > $out",
 			output: 'cat > "$out"',
+			errors: [{ messageId: "unquotedParameterExpansion" }],
+		},
+		{
+			code: "cat > $out",
+			output: 'cat > "$out"',
+			languageOptions: { variant: "mksh" },
+			errors: [{ messageId: "unquotedParameterExpansion" }],
+		},
+		{
+			// Arguments still word-split in POSIX sh
+			code: "cat $in > $out",
+			output: 'cat "$in" > $out',
+			languageOptions: { variant: "posix" },
 			errors: [{ messageId: "unquotedParameterExpansion" }],
 		},
 		{

@@ -40,6 +40,9 @@ const rule: BashRuleDefinition<{
 	create(context) {
 		const { sourceCode } = context;
 
+		// POSIX sh doesn't field-split redirection targets the way Bash does.
+		const splitsRedirects = context.languageOptions.variant !== "posix";
+
 		function checkWord(word: WordNode): void {
 			for (const part of word.parts) {
 				if (
@@ -101,6 +104,7 @@ const rule: BashRuleDefinition<{
 
 			Redirect(node) {
 				if (
+					splitsRedirects &&
 					node.target &&
 					!NON_SPLITTING_REDIRECTS.has(node.operator)
 				) {
