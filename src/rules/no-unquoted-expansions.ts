@@ -19,10 +19,12 @@ const rule: BashRuleDefinition<{
 }> = {
 	meta: {
 		type: "problem",
+		languages: ["shell/bash"],
 		docs: {
 			description:
 				"Require quoting parameter expansions and command substitutions that are subject to word splitting",
 			recommended: true,
+			dialects: ["Bash", "POSIX sh", "mksh"],
 			url: "https://github.com/eslint/bash/blob/main/docs/rules/no-unquoted-expansions.md",
 		},
 		fixable: "code",
