@@ -8,10 +8,12 @@ import type { BashRuleDefinition } from "../types.js";
 const rule: BashRuleDefinition<{ MessageIds: "useDollarParen" }> = {
 	meta: {
 		type: "suggestion",
+		languages: ["shell/bash"],
 		docs: {
 			description:
 				"Disallow legacy backtick command substitution in favor of `$(...)`",
 			recommended: true,
+			dialects: ["Bash", "POSIX sh", "mksh"],
 			url: "https://github.com/eslint/bash/blob/main/docs/rules/no-backticks.md",
 		},
 		fixable: "code",
