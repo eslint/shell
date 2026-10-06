@@ -9,10 +9,12 @@ import type { BashRuleDefinition } from "../types.js";
 const rule: BashRuleDefinition<{ MessageIds: "lsIteration" }> = {
 	meta: {
 		type: "problem",
+		languages: ["shell/bash"],
 		docs: {
 			description:
 				"Disallow iterating over `ls` output, which breaks on special characters",
 			recommended: true,
+			dialects: ["Bash", "POSIX sh", "mksh"],
 			url: "https://github.com/eslint/bash/blob/main/docs/rules/no-ls-iteration.md",
 		},
 		schema: [],

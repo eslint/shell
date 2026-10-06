@@ -9,6 +9,7 @@ import rule from "./no-ls-iteration.js";
 const ruleTester = new RuleTester({
 	plugins: {
 		bash: {
+			meta: { namespace: "shell" },
 			languages: { bash: new BashLanguage() },
 		},
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- plugin shape is validated by ESLint at runtime.
