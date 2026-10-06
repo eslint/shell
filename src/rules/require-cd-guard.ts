@@ -11,10 +11,12 @@ const rule: BashRuleDefinition<{
 }> = {
 	meta: {
 		type: "problem",
+		languages: ["shell/bash"],
 		docs: {
 			description:
 				"Require `cd` failures to be handled, e.g. `cd ... || exit`",
 			recommended: true,
+			dialects: ["Bash", "POSIX sh", "mksh"],
 			url: "https://github.com/eslint/bash/blob/main/docs/rules/require-cd-guard.md",
 		},
 		hasSuggestions: true,
