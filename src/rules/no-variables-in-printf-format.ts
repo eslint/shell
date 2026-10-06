@@ -9,10 +9,12 @@ import type { BashRuleDefinition } from "../types.js";
 const rule: BashRuleDefinition<{ MessageIds: "variableInFormat" }> = {
 	meta: {
 		type: "problem",
+		languages: ["shell/bash"],
 		docs: {
 			description:
 				"Disallow variables in the printf format string; use %s placeholders instead",
 			recommended: true,
+			dialects: ["Bash", "POSIX sh", "mksh"],
 			url: "https://github.com/eslint/bash/blob/main/docs/rules/no-variables-in-printf-format.md",
 		},
 		schema: [],
