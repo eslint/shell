@@ -11,9 +11,11 @@ const optionsWithArguments = new Set(["a", "d", "i", "n", "N", "p", "t", "u"]);
 const rule: BashRuleDefinition<{ MessageIds: "missingR" }> = {
 	meta: {
 		type: "problem",
+		languages: ["shell/bash"],
 		docs: {
 			description: "Require `read -r` so backslashes are not mangled",
 			recommended: true,
+			dialects: ["Bash", "POSIX sh", "mksh"],
 			url: "https://github.com/eslint/bash/blob/main/docs/rules/require-read-r.md",
 		},
 		fixable: "code",
