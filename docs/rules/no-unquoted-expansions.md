@@ -12,13 +12,14 @@ This rule warns about unquoted parameter expansions (`$var`, `${var}`, `$@`, `$1
 
 - a command's name and arguments, including arguments to `[ ... ]`;
 - the word list of a `for ... in` loop;
-- redirection targets, such as `> $file`.
+- redirection targets, such as `> $file`, except when the `variant` language option is `"posix"`.
 
 The rule does not warn about:
 
 - expansions inside double quotes;
 - parameters that can't contain whitespace: `$?`, `$$`, `$!`, `$#`, `$-`, and length expansions such as `${#array[@]}`;
-- contexts where Bash doesn't split words: variable assignments (`x=$y`), `[[ ... ]]`, `case` subjects, arithmetic such as `$((...))`, and heredoc or herestring redirects (`<<`, `<<-`, `<<<`).
+- contexts where Bash doesn't split words: variable assignments (`x=$y`), `[[ ... ]]`, `case` subjects, arithmetic such as `$((...))`, and heredoc or herestring redirects (`<<`, `<<-`, `<<<`);
+- redirection targets when the `variant` language option is `"posix"`, because POSIX `sh` doesn't split them.
 
 This rule is autofixable when the expansion is the entire word: `$var` becomes `"$var"`. Words that mix an expansion with other text, such as `prefix$var`, are reported but not fixed.
 
