@@ -4,15 +4,8 @@
   "packages": {
     ".": {
       "release-type": "node",
-      "include-component-in-tag": false,
-      "extra-files": ["src/index.ts"],
-      "changelog-sections": [
-        { "type": "feat", "section": "Features" },
-        { "type": "fix", "section": "Bug Fixes" },
-        { "type": "perf", "section": "Performance" },
-        { "type": "docs", "section": "Documentation" },
-        { "type": "chore", "section": "Chores", "hidden": true }
-      ]
+      "pull-request-title-pattern": "chore: release ${version} 🚀",
+      "extra-files": ["src/index.ts"]
     }
   }
 }
