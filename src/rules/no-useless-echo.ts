@@ -9,9 +9,11 @@ import type { BashRuleDefinition } from "../types.js";
 const rule: BashRuleDefinition<{ MessageIds: "uselessEcho" }> = {
 	meta: {
 		type: "suggestion",
+		languages: ["shell/bash"],
 		docs: {
 			description: "Disallow useless `echo` inside command substitutions",
 			recommended: true,
+			dialects: ["Bash", "POSIX sh", "mksh"],
 			url: "https://github.com/eslint/bash/blob/main/docs/rules/no-useless-echo.md",
 		},
 		schema: [],
