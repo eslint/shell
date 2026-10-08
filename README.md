@@ -100,10 +100,10 @@ Each rule mirrors a well-known ShellCheck check.
 
 ### Rule options
 
-`bash/no-unused-vars` accepts an object option:
+`shell/no-unused-vars` accepts an object option:
 
 ```js
-"bash/no-unused-vars": ["error", { allowed: ["MY_GLOBAL"] }]
+"shell/no-unused-vars": ["error", { allowed: ["MY_GLOBAL"] }]
 ```
 
 ## Configuration comments
