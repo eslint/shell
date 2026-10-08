@@ -9,7 +9,7 @@ import type { ShellRuleDefinition } from "../types.js";
 const rule: ShellRuleDefinition<{ MessageIds: "variableInFormat" }> = {
 	meta: {
 		type: "problem",
-		languages: ["shell/bash"],
+		languages: ["shell/bash", "shell/posix", "shell/mksh"],
 		docs: {
 			description:
 				"Disallow variables in the printf format string; use %s placeholders instead",
