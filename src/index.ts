@@ -14,7 +14,9 @@ const plugin = {
 		version: "0.0.0", // x-release-please-version
 	},
 	languages: {
-		bash: new ShellLanguage(),
+		bash: new ShellLanguage({ variant: "bash" }),
+		posix: new ShellLanguage({ variant: "posix" }),
+		mksh: new ShellLanguage({ variant: "mksh" }),
 	},
 	rules,
 	configs: {

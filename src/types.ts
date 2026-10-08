@@ -446,7 +446,7 @@ export type ShellNode =
 export type ShellVariant = "bash" | "posix" | "mksh";
 
 export interface ShellLanguageOptions {
-	/** The shell dialect to parse. Defaults to `"bash"`. */
+	/** The shell dialect to parse. Defaults to the variant of the language in use. */
 	variant?: ShellVariant;
 
 	[key: string]: unknown;

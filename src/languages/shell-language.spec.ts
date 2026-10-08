@@ -32,6 +32,27 @@ describe("ShellLanguage", () => {
 		});
 	});
 
+	describe("constructor", () => {
+		it.each(["bash", "posix", "mksh"] as const)(
+			"should use the %s variant as the default language option",
+			variant => {
+				expect(
+					new ShellLanguage({ variant }).defaultLanguageOptions,
+				).toEqual({ variant });
+			},
+		);
+
+		it("should reject unknown variants", () => {
+			expect(
+				() =>
+					new ShellLanguage({
+						// @ts-expect-error -- testing invalid input
+						variant: "fish",
+					}),
+			).toThrow(TypeError);
+		});
+	});
+
 	describe("validateLanguageOptions", () => {
 		it("should accept valid variants", () => {
 			expect(() =>
@@ -78,6 +99,27 @@ describe("ShellLanguage", () => {
 				expect(result.errors[0]?.column).toBeGreaterThanOrEqual(1);
 				expect(result.errors[0]?.message.length).toBeGreaterThan(0);
 			}
+		});
+
+		it("should parse with the variant passed to the constructor", () => {
+			const file = createFile("diff <(sort a) <(sort b)\n");
+
+			expect(new ShellLanguage({ variant: "posix" }).parse(file).ok).toBe(
+				false,
+			);
+			expect(new ShellLanguage({ variant: "bash" }).parse(file).ok).toBe(
+				true,
+			);
+
+			// `|&` with no following command starts a coprocess in mksh only.
+			const coprocess = createFile("cat |&\n");
+
+			expect(
+				new ShellLanguage({ variant: "mksh" }).parse(coprocess).ok,
+			).toBe(true);
+			expect(
+				new ShellLanguage({ variant: "bash" }).parse(coprocess).ok,
+			).toBe(false);
 		});
 
 		it("should respect the variant language option", () => {

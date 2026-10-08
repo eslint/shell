@@ -1,5 +1,5 @@
 /**
- * @fileoverview A test-only plugin with rules that exercise the Bash
+ * @fileoverview A test-only plugin with rules that exercise the shell
  * language independently of the rules shipped by the plugin.
  */
 

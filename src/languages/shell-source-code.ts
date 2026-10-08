@@ -20,7 +20,7 @@ import type {
 import { visitorKeys } from "../visitor-keys.js";
 import type {
 	ShellLanguageOptions,
-	BashNode,
+	ShellNode,
 	CommentNode,
 	ProgramNode,
 } from "../types.js";
@@ -53,13 +53,13 @@ export interface ShellSourceCodeOptions {
 export class ShellSourceCode extends TextSourceCodeBase<{
 	LangOptions: ShellLanguageOptions;
 	RootNode: ProgramNode;
-	SyntaxElementWithLoc: BashNode;
+	SyntaxElementWithLoc: ShellNode;
 	ConfigNode: CommentNode;
 }> {
 	/** All comments found in the file, in source order. */
 	comments: CommentNode[];
 
-	#parents = new Map<BashNode, BashNode>();
+	#parents = new Map<ShellNode, ShellNode>();
 	#steps: VisitNodeStep[] | null = null;
 	#lineOffsets: number[] | null = null;
 	#inlineConfigComments: CommentNode[] | null = null;
@@ -110,18 +110,18 @@ export class ShellSourceCode extends TextSourceCodeBase<{
 		};
 	}
 
-	getLoc(node: BashNode): SourceLocation {
+	getLoc(node: ShellNode): SourceLocation {
 		return {
 			start: this.#locFromIndex(node.start),
 			end: this.#locFromIndex(node.end),
 		};
 	}
 
-	getRange(node: BashNode): SourceRange {
+	getRange(node: ShellNode): SourceRange {
 		return [node.start, node.end];
 	}
 
-	getParent(node: BashNode): BashNode | undefined {
+	getParent(node: ShellNode): ShellNode | undefined {
 		this.#ensureTraversed();
 		return this.#parents.get(node);
 	}
@@ -139,7 +139,10 @@ export class ShellSourceCode extends TextSourceCodeBase<{
 
 		const steps: VisitNodeStep[] = (this.#steps = []);
 
-		const visit = (node: BashNode, parent: BashNode | undefined): void => {
+		const visit = (
+			node: ShellNode,
+			parent: ShellNode | undefined,
+		): void => {
 			if (parent) {
 				this.#parents.set(node, parent);
 			}
@@ -158,11 +161,11 @@ export class ShellSourceCode extends TextSourceCodeBase<{
 				if (Array.isArray(child)) {
 					for (const element of child) {
 						if (element) {
-							visit(element as BashNode, node);
+							visit(element as ShellNode, node);
 						}
 					}
 				} else if (child) {
-					visit(child as BashNode, node);
+					visit(child as ShellNode, node);
 				}
 			}
 

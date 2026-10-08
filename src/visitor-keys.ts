@@ -1,5 +1,5 @@
 /**
- * @fileoverview Visitor keys describing the traversal order of the Bash
+ * @fileoverview Visitor keys describing the traversal order of the shell
  * syntax tree. Keys are listed in source order.
  */
 

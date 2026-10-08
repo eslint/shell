@@ -18,8 +18,17 @@ describe("plugin", () => {
 		expect(() => parseShell("if then fi\n")).toThrow(ShellSyntaxError);
 	});
 
-	it("should expose the bash language", () => {
-		expect(plugin.languages.bash).toBeInstanceOf(ShellLanguage);
+	it("should expose a language for each shell variant", () => {
+		expect(Object.keys(plugin.languages).sort()).toEqual([
+			"bash",
+			"mksh",
+			"posix",
+		]);
+
+		for (const [variant, language] of Object.entries(plugin.languages)) {
+			expect(language).toBeInstanceOf(ShellLanguage);
+			expect(language.defaultLanguageOptions).toEqual({ variant });
+		}
 	});
 
 	it("should expose all rules", () => {
