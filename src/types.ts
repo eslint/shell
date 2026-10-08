@@ -1,5 +1,5 @@
 /**
- * @fileoverview Type definitions for the Bash ESTree-style syntax tree. See
+ * @fileoverview Type definitions for the shell ESTree-style syntax tree. See
  * docs/syntax-tree.md for the full documentation of the tree format.
  */
 
@@ -13,7 +13,7 @@
  * or `loc` properties; use `sourceCode.getRange(node)` and
  * `sourceCode.getLoc(node)` instead.
  */
-export interface BashNodeBase {
+export interface ShellNodeBase {
 	type: string;
 	start: number;
 	end: number;
@@ -22,7 +22,7 @@ export interface BashNodeBase {
 /**
  * Properties shared by every node that can appear in a statement position.
  */
-export interface StatementBase extends BashNodeBase {
+export interface StatementBase extends ShellNodeBase {
 	redirects: RedirectNode[];
 	negated: boolean;
 	background: boolean;
@@ -32,13 +32,13 @@ export interface StatementBase extends BashNodeBase {
 // Root
 //------------------------------------------------------------------------------
 
-export interface ProgramNode extends BashNodeBase {
+export interface ProgramNode extends ShellNodeBase {
 	type: "Program";
 	body: StatementNode[];
 	comments: CommentNode[];
 }
 
-export interface CommentNode extends BashNodeBase {
+export interface CommentNode extends ShellNodeBase {
 	type: "Comment";
 
 	/** The comment text without the leading `#`. */
@@ -88,7 +88,7 @@ export interface IfStatementNode extends StatementBase {
 	alternate: IfStatementNode | ElseClauseNode | null;
 }
 
-export interface ElseClauseNode extends BashNodeBase {
+export interface ElseClauseNode extends ShellNodeBase {
 	type: "ElseClause";
 	body: StatementNode[];
 }
@@ -129,7 +129,7 @@ export interface CaseStatementNode extends StatementBase {
 	cases: CaseClauseNode[];
 }
 
-export interface CaseClauseNode extends BashNodeBase {
+export interface CaseClauseNode extends ShellNodeBase {
 	type: "CaseClause";
 	patterns: WordNode[];
 	body: StatementNode[];
@@ -203,17 +203,17 @@ export type StatementNode =
 // Words and word parts
 //------------------------------------------------------------------------------
 
-export interface WordNode extends BashNodeBase {
+export interface WordNode extends ShellNodeBase {
 	type: "Word";
 	parts: WordPartNode[];
 }
 
-export interface LiteralNode extends BashNodeBase {
+export interface LiteralNode extends ShellNodeBase {
 	type: "Literal";
 	value: string;
 }
 
-export interface SingleQuotedStringNode extends BashNodeBase {
+export interface SingleQuotedStringNode extends ShellNodeBase {
 	type: "SingleQuotedString";
 
 	/** The text between the quotes. */
@@ -223,7 +223,7 @@ export interface SingleQuotedStringNode extends BashNodeBase {
 	dollar: boolean;
 }
 
-export interface DoubleQuotedStringNode extends BashNodeBase {
+export interface DoubleQuotedStringNode extends ShellNodeBase {
 	type: "DoubleQuotedString";
 	parts: WordPartNode[];
 
@@ -231,7 +231,7 @@ export interface DoubleQuotedStringNode extends BashNodeBase {
 	dollar: boolean;
 }
 
-export interface ParameterExpansionNode extends BashNodeBase {
+export interface ParameterExpansionNode extends ShellNodeBase {
 	type: "ParameterExpansion";
 
 	/** The parameter name (`foo`, `1`, `@`, `?`, ...). */
@@ -269,7 +269,7 @@ export interface ParameterExpansionNode extends BashNodeBase {
 	sliceLength: ArithmeticExpressionNode | null;
 }
 
-export interface CommandSubstitutionNode extends BashNodeBase {
+export interface CommandSubstitutionNode extends ShellNodeBase {
 	type: "CommandSubstitution";
 	body: StatementNode[];
 
@@ -277,18 +277,18 @@ export interface CommandSubstitutionNode extends BashNodeBase {
 	backquotes: boolean;
 }
 
-export interface ProcessSubstitutionNode extends BashNodeBase {
+export interface ProcessSubstitutionNode extends ShellNodeBase {
 	type: "ProcessSubstitution";
 	operator: "<(" | ">(";
 	body: StatementNode[];
 }
 
-export interface ArithmeticExpansionNode extends BashNodeBase {
+export interface ArithmeticExpansionNode extends ShellNodeBase {
 	type: "ArithmeticExpansion";
 	expression: ArithmeticExpressionNode | null;
 }
 
-export interface ExtendedGlobNode extends BashNodeBase {
+export interface ExtendedGlobNode extends ShellNodeBase {
 	type: "ExtendedGlob";
 	operator: "@(" | "*(" | "+(" | "?(" | "!(";
 	pattern: string;
@@ -308,7 +308,7 @@ export type WordPartNode =
 // Assignments, identifiers, redirects
 //------------------------------------------------------------------------------
 
-export interface VariableAssignmentNode extends BashNodeBase {
+export interface VariableAssignmentNode extends ShellNodeBase {
 	type: "VariableAssignment";
 	name: IdentifierNode | null;
 
@@ -321,23 +321,23 @@ export interface VariableAssignmentNode extends BashNodeBase {
 	append: boolean;
 }
 
-export interface ArrayExpressionNode extends BashNodeBase {
+export interface ArrayExpressionNode extends ShellNodeBase {
 	type: "ArrayExpression";
 	elements: ArrayElementNode[];
 }
 
-export interface ArrayElementNode extends BashNodeBase {
+export interface ArrayElementNode extends ShellNodeBase {
 	type: "ArrayElement";
 	index: ArithmeticExpressionNode | null;
 	value: WordNode | null;
 }
 
-export interface IdentifierNode extends BashNodeBase {
+export interface IdentifierNode extends ShellNodeBase {
 	type: "Identifier";
 	name: string;
 }
 
-export interface RedirectNode extends BashNodeBase {
+export interface RedirectNode extends ShellNodeBase {
 	type: "Redirect";
 
 	/** `<`, `>`, `>>`, `<<`, `<<-`, `<<<`, `<&`, `>&`, `&>`, `&>>`, `<>`, `>|`. */
@@ -357,21 +357,21 @@ export interface RedirectNode extends BashNodeBase {
 // Arithmetic expressions
 //------------------------------------------------------------------------------
 
-export interface BinaryArithmeticNode extends BashNodeBase {
+export interface BinaryArithmeticNode extends ShellNodeBase {
 	type: "BinaryArithmetic";
 	operator: string;
 	left: ArithmeticExpressionNode;
 	right: ArithmeticExpressionNode;
 }
 
-export interface UnaryArithmeticNode extends BashNodeBase {
+export interface UnaryArithmeticNode extends ShellNodeBase {
 	type: "UnaryArithmetic";
 	operator: string;
 	prefix: boolean;
 	argument: ArithmeticExpressionNode;
 }
 
-export interface ParenthesizedArithmeticNode extends BashNodeBase {
+export interface ParenthesizedArithmeticNode extends ShellNodeBase {
 	type: "ParenthesizedArithmetic";
 	expression: ArithmeticExpressionNode;
 }
@@ -386,20 +386,20 @@ export type ArithmeticExpressionNode =
 // Test expressions ([[ ... ]])
 //------------------------------------------------------------------------------
 
-export interface BinaryTestNode extends BashNodeBase {
+export interface BinaryTestNode extends ShellNodeBase {
 	type: "BinaryTest";
 	operator: string;
 	left: TestExpressionNode;
 	right: TestExpressionNode;
 }
 
-export interface UnaryTestNode extends BashNodeBase {
+export interface UnaryTestNode extends ShellNodeBase {
 	type: "UnaryTest";
 	operator: string;
 	argument: TestExpressionNode;
 }
 
-export interface ParenthesizedTestNode extends BashNodeBase {
+export interface ParenthesizedTestNode extends ShellNodeBase {
 	type: "ParenthesizedTest";
 	expression: TestExpressionNode;
 }
@@ -411,7 +411,7 @@ export type TestExpressionNode =
 // Union of all nodes
 //------------------------------------------------------------------------------
 
-export type BashNode =
+export type ShellNode =
 	| ProgramNode
 	| CommentNode
 	| StatementNode
@@ -435,4 +435,4 @@ export type BashNode =
 // Language options
 //------------------------------------------------------------------------------
 
-export type BashShellVariant = "bash" | "posix" | "mksh";
+export type ShellVariant = "bash" | "posix" | "mksh";

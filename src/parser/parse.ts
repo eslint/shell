@@ -1,5 +1,5 @@
 /**
- * @fileoverview Parses Bash source code into an ESTree-style syntax tree by
+ * @fileoverview Parses shell source code into an ESTree-style syntax tree by
  * wrapping the mvdan-sh parser (a GopherJS build of mvdan.cc/sh) and
  * translating its tree. See docs/syntax-tree.md for the tree format.
  */
@@ -9,7 +9,7 @@ import type {
 	ArithmeticExpressionNode,
 	ArrayElementNode,
 	ArrayExpressionNode,
-	BashShellVariant,
+	ShellVariant,
 	CaseClauseNode,
 	CommentNode,
 	IdentifierNode,
@@ -42,16 +42,16 @@ const LEADING_TRIVIA = /^(?:\s|#.*)*/u;
 // eslint-disable-next-line no-control-regex -- intentionally matches the full ASCII range.
 const NON_ASCII = /[^\x00-\x7f]/u;
 
-const VARIANTS = new Map<BashShellVariant, number>([
+const VARIANTS = new Map<ShellVariant, number>([
 	["bash", syntax.LangBash],
 	["posix", syntax.LangPOSIX],
 	["mksh", syntax.LangMirBSDKorn],
 ]);
 
 /**
- * The error thrown when Bash source code cannot be parsed.
+ * The error thrown when shell source code cannot be parsed.
  */
-export class BashSyntaxError extends SyntaxError {
+export class ShellSyntaxError extends SyntaxError {
 	line: number;
 	column: number;
 
@@ -60,22 +60,22 @@ export class BashSyntaxError extends SyntaxError {
 
 	constructor(message: string, line: number, column: number, path?: string) {
 		super(message);
-		this.name = "BashSyntaxError";
+		this.name = "ShellSyntaxError";
 		this.line = line;
 		this.column = column;
 		this.path = path;
 	}
 }
 
-export interface BashParseOptions {
+export interface ShellParseOptions {
 	/** The shell dialect to parse. Defaults to `"bash"`. */
-	variant?: BashShellVariant;
+	variant?: ShellVariant;
 
-	/** The file path reported as `BashSyntaxError#path` on syntax errors. */
+	/** The file path reported as `ShellSyntaxError#path` on syntax errors. */
 	path?: string;
 }
 
-export interface BashParseResult {
+export interface ShellParseResult {
 	ast: ProgramNode;
 	comments: CommentNode[];
 }
@@ -974,13 +974,13 @@ class Translator {
 //------------------------------------------------------------------------------
 
 /**
- * Parses Bash source code into an ESTree-style syntax tree.
- * @throws {BashSyntaxError} When the source code contains a syntax error.
+ * Parses shell source code into an ESTree-style syntax tree.
+ * @throws {ShellSyntaxError} When the source code contains a syntax error.
  */
-export function parseBash(
+export function parseShell(
 	text: string,
-	options: BashParseOptions = {},
-): BashParseResult {
+	options: ShellParseOptions = {},
+): ShellParseResult {
 	const variant = VARIANTS.get(options.variant ?? "bash");
 
 	if (variant === undefined) {
@@ -1010,7 +1010,7 @@ export function parseBash(
 			const offset = createByteToCharConverter(text)(byteOffset);
 			const { line, column } = locate(text, offset);
 
-			throw new BashSyntaxError(
+			throw new ShellSyntaxError(
 				parseError.Text || parseError.Error(),
 				line,
 				column,
