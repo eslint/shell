@@ -9,7 +9,7 @@ import type { ShellRuleDefinition } from "../types.js";
 const rule: ShellRuleDefinition<{ MessageIds: "uselessEcho" }> = {
 	meta: {
 		type: "suggestion",
-		languages: ["shell/bash"],
+		languages: ["shell/bash", "shell/posix", "shell/mksh"],
 		docs: {
 			description: "Disallow useless `echo` inside command substitutions",
 			recommended: true,
