@@ -190,20 +190,20 @@ describe("shipped rules", () => {
 				"",
 			].join("\n"),
 			{
-				"bash/require-cd-guard": "error",
-				"bash/no-ls-iteration": "error",
-				"bash/no-unquoted-expansions": "error",
-				"bash/no-useless-cat": "error",
+				"shell/require-cd-guard": "error",
+				"shell/no-ls-iteration": "error",
+				"shell/no-unquoted-expansions": "error",
+				"shell/no-useless-cat": "error",
 			},
 		);
 		const ruleIds = new Set(messages.map(message => message.ruleId));
 
 		expect(ruleIds).toEqual(
 			new Set([
-				"bash/no-ls-iteration",
-				"bash/no-unquoted-expansions",
-				"bash/no-useless-cat",
-				"bash/require-cd-guard",
+				"shell/no-ls-iteration",
+				"shell/no-unquoted-expansions",
+				"shell/no-useless-cat",
+				"shell/require-cd-guard",
 			]),
 		);
 	});
@@ -212,12 +212,12 @@ describe("shipped rules", () => {
 		const linter = new Linter();
 		const messages = linter.verify(
 			"echo `pwd`\n",
-			[bash.configs.recommended] as never,
+			[shell.configs.recommended] as never,
 			"script.sh",
 		);
 
 		expect(
-			messages.some(message => message.ruleId === "bash/no-backticks"),
+			messages.some(message => message.ruleId === "shell/no-backticks"),
 		).toBe(true);
 	});
 
@@ -233,15 +233,15 @@ describe("shipped rules", () => {
 		].join("\n");
 		const messages = linter.verify(
 			code,
-			[bash.configs.recommended] as never,
+			[shell.configs.recommended] as never,
 			"script.sh",
 		);
 		const ruleIds = new Set(messages.map(message => message.ruleId));
 
-		expect(ruleIds).toContain("bash/no-unused-vars");
-		expect(ruleIds).toContain("bash/require-cd-guard");
-		expect(ruleIds).toContain("bash/require-read-r");
-		expect(ruleIds).toContain("bash/no-unquoted-expansions");
+		expect(ruleIds).toContain("shell/no-unused-vars");
+		expect(ruleIds).toContain("shell/require-cd-guard");
+		expect(ruleIds).toContain("shell/require-read-r");
+		expect(ruleIds).toContain("shell/no-unquoted-expansions");
 	});
 
 	it("should not report a well-written script", () => {
@@ -260,7 +260,7 @@ describe("shipped rules", () => {
 		].join("\n");
 		const messages = linter.verify(
 			code,
-			[bash.configs.recommended] as never,
+			[shell.configs.recommended] as never,
 			"script.sh",
 		);
 

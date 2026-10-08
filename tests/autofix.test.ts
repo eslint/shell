@@ -52,9 +52,9 @@ describe("autofix", () => {
 
 	it("should apply fixes from multiple rules at once", () => {
 		const result = fix("read name\necho `pwd` $name\n", {
-			"bash/require-read-r": "error",
-			"bash/no-backticks": "error",
-			"bash/no-unquoted-expansions": "error",
+			"shell/require-read-r": "error",
+			"shell/no-backticks": "error",
+			"shell/no-unquoted-expansions": "error",
 		});
 
 		expect(result.fixed).toBe(true);
