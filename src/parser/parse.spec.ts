@@ -1,9 +1,9 @@
 /**
- * @fileoverview Unit tests for the Bash parser wrapper.
+ * @fileoverview Unit tests for the shell parser wrapper.
  */
 
 import { describe, expect, it } from "vitest";
-import { BashSyntaxError, parseBash } from "./parse.js";
+import { ShellSyntaxError, parseShell } from "./parse.js";
 import type {
 	ArithmeticForStatementNode,
 	BinaryTestNode,
@@ -35,7 +35,7 @@ import type {
 
 /** Convenience helper returning the first statement of a parse. */
 function first<T>(text: string): T {
-	return parseBash(text).ast.body[0] as T;
+	return parseShell(text).ast.body[0] as T;
 }
 
 /** Returns the nth argument word of a simple command. */
@@ -49,11 +49,11 @@ function arg(command: CommandNode, index: number): WordNode {
 	return word;
 }
 
-describe("parseBash", () => {
+describe("parseShell", () => {
 	describe("programs", () => {
 		it("should return a Program covering the whole text", () => {
 			const text = "echo hello\necho world\n";
-			const { ast } = parseBash(text);
+			const { ast } = parseShell(text);
 
 			expect(ast.type).toBe("Program");
 			expect(ast.start).toBe(0);
@@ -62,7 +62,7 @@ describe("parseBash", () => {
 		});
 
 		it("should parse an empty program", () => {
-			const { ast } = parseBash("");
+			const { ast } = parseShell("");
 
 			expect(ast.body).toHaveLength(0);
 			expect(ast.comments).toHaveLength(0);
@@ -499,7 +499,7 @@ describe("parseBash", () => {
 
 		/*
 		 * Heredoc bodies are the one place where the usual ESTree
-		 * containment invariant does not hold, because Bash splits the
+		 * containment invariant does not hold, because the shell splits the
 		 * construct across the line break. These cases lock in the ranges
 		 * documented in `docs/syntax-tree.md`; see that file for why.
 		 */
@@ -743,7 +743,7 @@ describe("parseBash", () => {
 	describe("comments", () => {
 		it("should collect comments with positions", () => {
 			const text = "#!/bin/bash\n# a note\necho hi # trailing\n";
-			const { comments } = parseBash(text);
+			const { comments } = parseShell(text);
 
 			expect(comments).toHaveLength(3);
 			expect(comments[0]?.text).toBe("!/bin/bash");
@@ -774,16 +774,16 @@ describe("parseBash", () => {
 	});
 
 	describe("errors", () => {
-		it("should throw BashSyntaxError with location on bad syntax", () => {
-			expect(() => parseBash("if then fi\n")).toThrow(BashSyntaxError);
+		it("should throw ShellSyntaxError with location on bad syntax", () => {
+			expect(() => parseShell("if then fi\n")).toThrow(ShellSyntaxError);
 
 			try {
-				parseBash("echo )\n");
+				parseShell("echo )\n");
 				expect.unreachable();
 			} catch (error) {
-				const syntaxError = error as BashSyntaxError;
+				const syntaxError = error as ShellSyntaxError;
 
-				expect(syntaxError.name).toBe("BashSyntaxError");
+				expect(syntaxError.name).toBe("ShellSyntaxError");
 				expect(syntaxError.line).toBeGreaterThanOrEqual(1);
 				expect(syntaxError.column).toBeGreaterThanOrEqual(1);
 				expect(syntaxError.message.length).toBeGreaterThan(0);
@@ -792,32 +792,32 @@ describe("parseBash", () => {
 
 		it("should report the line of errors on later lines", () => {
 			try {
-				parseBash("echo ok\nif then fi\n");
+				parseShell("echo ok\nif then fi\n");
 				expect.unreachable();
 			} catch (error) {
-				expect((error as BashSyntaxError).line).toBe(2);
+				expect((error as ShellSyntaxError).line).toBe(2);
 			}
 		});
 
 		it("should report the path option on the error", () => {
 			try {
-				parseBash("if then fi\n", { path: "script.sh" });
+				parseShell("if then fi\n", { path: "script.sh" });
 				expect.unreachable();
 			} catch (error) {
-				expect((error as BashSyntaxError).path).toBe("script.sh");
+				expect((error as ShellSyntaxError).path).toBe("script.sh");
 			}
 
 			try {
-				parseBash("if then fi\n");
+				parseShell("if then fi\n");
 				expect.unreachable();
 			} catch (error) {
-				expect((error as BashSyntaxError).path).toBeUndefined();
+				expect((error as ShellSyntaxError).path).toBeUndefined();
 			}
 		});
 
 		it("should throw on unknown variants", () => {
 			expect(() =>
-				parseBash("echo hi\n", {
+				parseShell("echo hi\n", {
 					// @ts-expect-error -- testing invalid input
 					variant: "zsh",
 				}),
@@ -827,13 +827,13 @@ describe("parseBash", () => {
 
 	describe("variants", () => {
 		it("should parse mksh sources", () => {
-			const { ast } = parseBash("echo hi\n", { variant: "mksh" });
+			const { ast } = parseShell("echo hi\n", { variant: "mksh" });
 
 			expect(ast.body).toHaveLength(1);
 		});
 
 		it("should report the mksh `;|` case terminator", () => {
-			const { ast } = parseBash(
+			const { ast } = parseShell(
 				"case $x in a) echo a ;| b) echo b ;; esac\n",
 				{ variant: "mksh" },
 			);
@@ -845,12 +845,12 @@ describe("parseBash", () => {
 			).toEqual([";|", ";;"]);
 		});
 
-		it("should reject bash-only syntax in posix mode", () => {
+		it("should reject bash-only syntax in the posix variant", () => {
 			expect(() =>
-				parseBash("diff <(sort a) <(sort b)\n", {
+				parseShell("diff <(sort a) <(sort b)\n", {
 					variant: "posix",
 				}),
-			).toThrow(BashSyntaxError);
+			).toThrow(ShellSyntaxError);
 		});
 	});
 });
