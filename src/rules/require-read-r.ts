@@ -4,11 +4,11 @@
  */
 
 import { getCommandName, getStaticText } from "./utils.js";
-import type { BashRuleDefinition } from "../types.js";
+import type { ShellRuleDefinition } from "../types.js";
 
 const optionsWithArguments = new Set(["a", "d", "i", "n", "N", "p", "t", "u"]);
 
-const rule: BashRuleDefinition<{ MessageIds: "missingR" }> = {
+const rule: ShellRuleDefinition<{ MessageIds: "missingR" }> = {
 	meta: {
 		type: "problem",
 		languages: ["shell/bash"],
@@ -16,7 +16,7 @@ const rule: BashRuleDefinition<{ MessageIds: "missingR" }> = {
 			description: "Require `read -r` so backslashes are not mangled",
 			recommended: true,
 			dialects: ["Bash", "POSIX sh", "mksh"],
-			url: "https://github.com/eslint/bash/blob/main/docs/rules/require-read-r.md",
+			url: "https://github.com/eslint/shell/blob/main/docs/rules/require-read-r.md",
 		},
 		fixable: "code",
 		schema: [],

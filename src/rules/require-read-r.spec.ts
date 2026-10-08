@@ -3,18 +3,18 @@
  */
 
 import { RuleTester } from "eslint";
-import { BashLanguage } from "../languages/bash-language.js";
+import { ShellLanguage } from "../languages/shell-language.js";
 import rule from "./require-read-r.js";
 
 const ruleTester = new RuleTester({
 	plugins: {
-		bash: {
+		shell: {
 			meta: { namespace: "shell" },
-			languages: { bash: new BashLanguage() },
+			languages: { bash: new ShellLanguage() },
 		},
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- plugin shape is validated by ESLint at runtime.
 	} as any,
-	language: "bash/bash",
+	language: "shell/bash",
 });
 
 ruleTester.run("require-read-r", rule as never, {
