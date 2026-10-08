@@ -4,9 +4,9 @@
  */
 
 import { isCommandNamed } from "./utils.js";
-import type { BashRuleDefinition } from "../types.js";
+import type { ShellRuleDefinition } from "../types.js";
 
-const rule: BashRuleDefinition<{ MessageIds: "uselessEcho" }> = {
+const rule: ShellRuleDefinition<{ MessageIds: "uselessEcho" }> = {
 	meta: {
 		type: "suggestion",
 		languages: ["shell/bash"],
@@ -14,7 +14,7 @@ const rule: BashRuleDefinition<{ MessageIds: "uselessEcho" }> = {
 			description: "Disallow useless `echo` inside command substitutions",
 			recommended: true,
 			dialects: ["Bash", "POSIX sh", "mksh"],
-			url: "https://github.com/eslint/bash/blob/main/docs/rules/no-useless-echo.md",
+			url: "https://github.com/eslint/shell/blob/main/docs/rules/no-useless-echo.md",
 		},
 		schema: [],
 		messages: {

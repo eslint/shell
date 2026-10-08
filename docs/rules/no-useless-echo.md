@@ -17,7 +17,7 @@ Substitutions that do more than echo, such as pipelines (`$(echo "$name" | tr a-
 Examples of **incorrect** code for this rule:
 
 ```bash
-# eslint bash/no-useless-echo: "error"
+# eslint shell/no-useless-echo: "error"
 
 name=$(echo "$first")
 
@@ -29,7 +29,7 @@ files=`echo "$dir"`
 Examples of **correct** code for this rule:
 
 ```bash
-# eslint bash/no-useless-echo: "error"
+# eslint shell/no-useless-echo: "error"
 
 name="$first"
 
