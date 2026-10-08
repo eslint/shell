@@ -36,7 +36,7 @@ describe("autofix", () => {
 
 	it("should quote unquoted expansions", () => {
 		const result = fix("cp $src $dest\n", {
-			"bash/no-unquoted-expansions": "error",
+			"shell/no-unquoted-expansions": "error",
 		});
 
 		expect(result.output).toBe('cp "$src" "$dest"\n');
