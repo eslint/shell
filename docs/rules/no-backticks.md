@@ -4,7 +4,7 @@ Disallow legacy backtick command substitution in favor of `$(...)`.
 
 ## Background
 
-Bash supports two syntaxes for command substitution: the legacy backtick form (`` `cmd` ``) and the POSIX `$(cmd)` form. The backtick form is harder to read and harder to get right:
+The shell supports two syntaxes for command substitution: the legacy backtick form (`` `cmd` ``) and the POSIX `$(cmd)` form. The backtick form is harder to read and harder to get right:
 
 - Nesting requires escaping the inner backticks (`` `outer \`inner\`` ``).
 - Backslashes inside backticks are processed differently than elsewhere, which makes quoting surprising.
@@ -21,7 +21,7 @@ This rule is autofixable: it rewrites `` `cmd` `` as `$(cmd)`. Substitutions tha
 Examples of **incorrect** code for this rule:
 
 ```bash
-# eslint bash/no-backticks: "error"
+# eslint shell/no-backticks: "error"
 
 today=`date +%F`
 
@@ -33,7 +33,7 @@ for f in `find . -name '*.sh'`; do echo "$f"; done
 Examples of **correct** code for this rule:
 
 ```bash
-# eslint bash/no-backticks: "error"
+# eslint shell/no-backticks: "error"
 
 today=$(date +%F)
 
