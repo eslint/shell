@@ -4,9 +4,9 @@
  */
 
 import { getCommandName } from "./utils.js";
-import type { BashRuleDefinition, StatementNode } from "../types.js";
+import type { ShellRuleDefinition, StatementNode } from "../types.js";
 
-const rule: BashRuleDefinition<{
+const rule: ShellRuleDefinition<{
 	MessageIds: "uncheckedCd" | "addGuard";
 }> = {
 	meta: {
@@ -17,7 +17,7 @@ const rule: BashRuleDefinition<{
 				"Require `cd` failures to be handled, e.g. `cd ... || exit`",
 			recommended: true,
 			dialects: ["Bash", "POSIX sh", "mksh"],
-			url: "https://github.com/eslint/bash/blob/main/docs/rules/require-cd-guard.md",
+			url: "https://github.com/eslint/shell/blob/main/docs/rules/require-cd-guard.md",
 		},
 		hasSuggestions: true,
 		schema: [],

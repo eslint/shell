@@ -23,7 +23,7 @@ This rule provides a suggestion, not an autofix, to append `|| exit`. It's a sug
 Examples of **incorrect** code for this rule:
 
 ```bash
-# eslint bash/require-cd-guard: "error"
+# eslint shell/require-cd-guard: "error"
 
 cd /tmp
 
@@ -38,7 +38,7 @@ test -d build && cd build
 Examples of **correct** code for this rule:
 
 ```bash
-# eslint bash/require-cd-guard: "error"
+# eslint shell/require-cd-guard: "error"
 
 cd /tmp || exit
 
