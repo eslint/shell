@@ -4,7 +4,7 @@
  */
 
 import { getCommandName, getStaticText } from "./utils.js";
-import type { BashRuleDefinition, WordNode, WordPartNode } from "../types.js";
+import type { ShellRuleDefinition, WordNode, WordPartNode } from "../types.js";
 
 function hasPotentialExpansion(word: WordNode): boolean {
 	const checkParts = (parts: WordPartNode[], quoted = false): boolean =>
@@ -31,7 +31,7 @@ function hasPotentialExpansion(word: WordNode): boolean {
 	return checkParts(word.parts);
 }
 
-const rule: BashRuleDefinition<{ MessageIds: "uselessCat" }> = {
+const rule: ShellRuleDefinition<{ MessageIds: "uselessCat" }> = {
 	meta: {
 		type: "suggestion",
 		languages: ["shell/bash"],
@@ -39,7 +39,7 @@ const rule: BashRuleDefinition<{ MessageIds: "uselessCat" }> = {
 			description: "Disallow useless `cat` at the start of a pipeline",
 			recommended: true,
 			dialects: ["Bash", "POSIX sh", "mksh"],
-			url: "https://github.com/eslint/bash/blob/main/docs/rules/no-useless-cat.md",
+			url: "https://github.com/eslint/shell/blob/main/docs/rules/no-useless-cat.md",
 		},
 		schema: [],
 		messages: {
