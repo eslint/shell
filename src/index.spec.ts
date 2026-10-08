@@ -44,7 +44,7 @@ describe("plugin", () => {
 			expect(rule.meta?.messages, ruleId).toBeTruthy();
 			expect(rule.meta?.schema, ruleId).toBeDefined();
 			expect(rule.meta?.docs?.url, ruleId).toBe(
-				`https://github.com/eslint/bash/blob/main/docs/rules/${ruleId}.md`,
+				`https://github.com/eslint/shell/blob/main/docs/rules/${ruleId}.md`,
 			);
 			expect(typeof rule.create, ruleId).toBe("function");
 		}

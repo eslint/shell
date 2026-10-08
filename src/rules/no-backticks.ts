@@ -3,9 +3,9 @@
  * Mirrors ShellCheck SC2006.
  */
 
-import type { BashRuleDefinition } from "../types.js";
+import type { ShellRuleDefinition } from "../types.js";
 
-const rule: BashRuleDefinition<{ MessageIds: "useDollarParen" }> = {
+const rule: ShellRuleDefinition<{ MessageIds: "useDollarParen" }> = {
 	meta: {
 		type: "suggestion",
 		languages: ["shell/bash"],
@@ -14,7 +14,7 @@ const rule: BashRuleDefinition<{ MessageIds: "useDollarParen" }> = {
 				"Disallow legacy backtick command substitution in favor of `$(...)`",
 			recommended: true,
 			dialects: ["Bash", "POSIX sh", "mksh"],
-			url: "https://github.com/eslint/bash/blob/main/docs/rules/no-backticks.md",
+			url: "https://github.com/eslint/shell/blob/main/docs/rules/no-backticks.md",
 		},
 		fixable: "code",
 		schema: [],

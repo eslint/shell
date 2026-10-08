@@ -4,7 +4,7 @@
 
 import { describe, expect, it } from "vitest";
 import { Linter } from "eslint";
-import bash from "../src/index.js";
+import shell from "../src/index.js";
 
 function fix(code: string, rules: Record<string, unknown>): Linter.FixReport {
 	const linter = new Linter();
@@ -14,8 +14,8 @@ function fix(code: string, rules: Record<string, unknown>): Linter.FixReport {
 		[
 			{
 				files: ["**/*.sh"],
-				plugins: { bash },
-				language: "bash/bash",
+				plugins: { shell },
+				language: "shell/bash",
 				rules: rules as never,
 			},
 		] as never,
@@ -26,7 +26,7 @@ function fix(code: string, rules: Record<string, unknown>): Linter.FixReport {
 describe("autofix", () => {
 	it("should fix backticks to $()", () => {
 		const result = fix("echo `pwd` `date`\n", {
-			"bash/no-backticks": "error",
+			"shell/no-backticks": "error",
 		});
 
 		expect(result.fixed).toBe(true);

@@ -6,14 +6,14 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { Linter } from "eslint";
-import bash from "../src/index.js";
+import shell from "../src/index.js";
 
 interface Example {
 	kind: "incorrect" | "correct";
 	code: string;
 }
 
-const CONFIG_COMMENT = /^# eslint bash\//u;
+const CONFIG_COMMENT = /^# eslint shell\//u;
 
 function readDoc(ruleId: string): string {
 	return readFileSync(
@@ -40,14 +40,14 @@ function lint(code: string): Linter.LintMessage[] {
 	return new Linter().verify(
 		code,
 		[
-			{ files: ["**/*.sh"], plugins: { bash }, language: "bash/bash" },
+			{ files: ["**/*.sh"], plugins: { shell }, language: "shell/bash" },
 		] as never,
 		"example.sh",
 	);
 }
 
 describe("rule documentation", () => {
-	for (const [ruleId, rule] of Object.entries(bash.rules)) {
+	for (const [ruleId, rule] of Object.entries(shell.rules)) {
 		describe(ruleId, () => {
 			const doc = readDoc(ruleId);
 			const examples = getExamples(doc);
@@ -97,7 +97,9 @@ describe("rule documentation", () => {
 						const messages = lint(`${config}\n${snippet}\n`);
 
 						expect(
-							messages.filter(m => m.ruleId === `bash/${ruleId}`),
+							messages.filter(
+								m => m.ruleId === `shell/${ruleId}`,
+							),
 							snippet,
 						).not.toHaveLength(0);
 						expect(
