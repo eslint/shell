@@ -1,0 +1,33 @@
+name: release-please
+
+on:
+    push:
+        branches: [main]
+
+jobs:
+    release-please:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            id-token: write
+        steps:
+            - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5
+              id: release
+              with:
+                  token: ${{ secrets.WORKFLOW_PUSH_BOT_TOKEN }}
+
+            - uses: actions/checkout@v7
+              if: ${{ steps.release.outputs.release_created }}
+
+            - uses: actions/setup-node@v7
+              if: ${{ steps.release.outputs.release_created }}
+              with:
+                  node-version: lts/*
+                  registry-url: "https://registry.npmjs.org"
+
+            - name: Build and Publish
+              run: |
+                  npm install
+                  npm run build
+                  npm publish --provenance
+              if: ${{ steps.release.outputs.release_created }}
