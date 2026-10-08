@@ -62,6 +62,31 @@ describe("ShellSourceCode", () => {
 
 			expect(loc.start).toEqual({ line: 1, column: 10 });
 		});
+
+		it("should compute the location of the Program node", () => {
+			for (const [text, end] of [
+				["", { line: 1, column: 1 }],
+				["echo a\necho b", { line: 2, column: 7 }],
+				["echo a\r\necho b\r\n", { line: 3, column: 1 }],
+			] as const) {
+				const sourceCode = createSourceCode(text);
+
+				expect(sourceCode.getLoc(sourceCode.ast)).toEqual({
+					start: { line: 1, column: 1 },
+					end,
+				});
+			}
+		});
+
+		it("should compute locations in files with CRLF line endings", () => {
+			const sourceCode = createSourceCode("echo a\r\necho b\r\n");
+			const second = sourceCode.ast.body[1]!;
+
+			expect(sourceCode.getLoc(second)).toEqual({
+				start: { line: 2, column: 1 },
+				end: { line: 2, column: 7 },
+			});
+		});
 	});
 
 	describe("getText", () => {
