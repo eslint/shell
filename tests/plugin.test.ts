@@ -266,4 +266,20 @@ describe("shipped rules", () => {
 
 		expect(messages).toEqual([]);
 	});
+
+	it.each(["shell/bash", "shell/posix", "shell/mksh"])(
+		"should run the recommended rules with the %s language",
+		language => {
+			const linter = new Linter();
+			const messages = linter.verify(
+				'echo "`pwd`"\n',
+				[{ ...shell.configs.recommended, language }] as never,
+				"script.sh",
+			);
+
+			expect(messages.map(message => message.ruleId)).toEqual([
+				"shell/no-backticks",
+			]);
+		},
+	);
 });
