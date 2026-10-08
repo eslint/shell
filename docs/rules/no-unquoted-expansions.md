@@ -4,7 +4,7 @@ Require quoting parameter expansions and command substitutions that are subject 
 
 ## Background
 
-When an expansion such as `$file` or `$(cmd)` is not quoted, Bash splits its value on whitespace and then expands any glob characters in the pieces. A file named `my report.txt` becomes two arguments, and a value containing `*` can turn into a list of unrelated files. Wrapping the expansion in double quotes (`"$file"`) passes the value through as a single argument.
+When an expansion such as `$file` or `$(cmd)` is not quoted, the shell splits its value on whitespace and then expands any glob characters in the pieces. A file named `my report.txt` becomes two arguments, and a value containing `*` can turn into a list of unrelated files. Wrapping the expansion in double quotes (`"$file"`) passes the value through as a single argument.
 
 ## Rule Details
 
@@ -18,7 +18,7 @@ The rule does not warn about:
 
 - expansions inside double quotes;
 - parameters that can't contain whitespace: `$?`, `$$`, `$!`, `$#`, `$-`, and length expansions such as `${#array[@]}`;
-- contexts where Bash doesn't split words: variable assignments (`x=$y`), `[[ ... ]]`, `case` subjects, arithmetic such as `$((...))`, and heredoc or herestring redirects (`<<`, `<<-`, `<<<`);
+- contexts where the shell doesn't split words: variable assignments (`x=$y`), `[[ ... ]]`, `case` subjects, arithmetic such as `$((...))`, and heredoc or herestring redirects (`<<`, `<<-`, `<<<`);
 - redirection targets when the `variant` language option is `"posix"`, because POSIX `sh` doesn't split them.
 
 This rule is autofixable when the expansion is the entire word: `$var` becomes `"$var"`. Words that mix an expansion with other text, such as `prefix$var`, are reported but not fixed.
@@ -26,7 +26,7 @@ This rule is autofixable when the expansion is the entire word: `$var` becomes `
 Examples of **incorrect** code for this rule:
 
 ```bash
-# eslint bash/no-unquoted-expansions: "error"
+# eslint shell/no-unquoted-expansions: "error"
 
 rm $file
 
@@ -44,7 +44,7 @@ $command --verbose
 Examples of **correct** code for this rule:
 
 ```bash
-# eslint bash/no-unquoted-expansions: "error"
+# eslint shell/no-unquoted-expansions: "error"
 
 rm "$file"
 

@@ -3,7 +3,7 @@
  * splitting and globbing. Mirrors ShellCheck SC2086/SC2046.
  */
 
-import type { BashRuleDefinition, WordNode } from "../types.js";
+import type { ShellRuleDefinition, WordNode } from "../types.js";
 
 /**
  * Parameters that always expand to values that cannot split, so quoting is
@@ -14,7 +14,7 @@ const SAFE_PARAMETERS = new Set(["?", "$", "!", "#", "-"]);
 /** Heredoc-style redirect operators whose targets never word-split. */
 const NON_SPLITTING_REDIRECTS = new Set(["<<", "<<-", "<<<"]);
 
-const rule: BashRuleDefinition<{
+const rule: ShellRuleDefinition<{
 	MessageIds: "unquotedParameterExpansion" | "unquotedCommandSubstitution";
 }> = {
 	meta: {
@@ -25,7 +25,7 @@ const rule: BashRuleDefinition<{
 				"Require quoting parameter expansions and command substitutions that are subject to word splitting",
 			recommended: true,
 			dialects: ["Bash", "POSIX sh", "mksh"],
-			url: "https://github.com/eslint/bash/blob/main/docs/rules/no-unquoted-expansions.md",
+			url: "https://github.com/eslint/shell/blob/main/docs/rules/no-unquoted-expansions.md",
 		},
 		fixable: "code",
 		schema: [],
