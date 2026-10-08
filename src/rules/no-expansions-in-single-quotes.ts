@@ -3,7 +3,7 @@
  * Mirrors ShellCheck SC2016.
  */
 
-import type { BashRuleDefinition } from "../types.js";
+import type { ShellRuleDefinition } from "../types.js";
 
 /**
  * Matches text that looks like an intended expansion: `$name`, `${...}`,
@@ -12,7 +12,7 @@ import type { BashRuleDefinition } from "../types.js";
  */
 const EXPANSION_LIKE = /\$[A-Za-z_{(]|`[^`]+`/u;
 
-const rule: BashRuleDefinition<{ MessageIds: "expansionInSingleQuotes" }> = {
+const rule: ShellRuleDefinition<{ MessageIds: "expansionInSingleQuotes" }> = {
 	meta: {
 		type: "suggestion",
 		languages: ["shell/bash"],
@@ -21,7 +21,7 @@ const rule: BashRuleDefinition<{ MessageIds: "expansionInSingleQuotes" }> = {
 				"Disallow expansion-like syntax inside single quotes, where it is not expanded",
 			recommended: true,
 			dialects: ["Bash", "POSIX sh", "mksh"],
-			url: "https://github.com/eslint/bash/blob/main/docs/rules/no-expansions-in-single-quotes.md",
+			url: "https://github.com/eslint/shell/blob/main/docs/rules/no-expansions-in-single-quotes.md",
 		},
 		schema: [],
 		messages: {
