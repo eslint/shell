@@ -9,7 +9,7 @@ import type { ShellRuleDefinition } from "../types.js";
 const rule: ShellRuleDefinition<{ MessageIds: "lsIteration" }> = {
 	meta: {
 		type: "problem",
-		languages: ["shell/bash"],
+		languages: ["shell/bash", "shell/posix", "shell/mksh"],
 		docs: {
 			description:
 				"Disallow iterating over `ls` output, which breaks on special characters",
