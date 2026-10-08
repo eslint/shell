@@ -163,17 +163,17 @@ describe("recommended configuration", () => {
 		const linter = new Linter();
 		const result = linter.verifyAndFix(
 			code,
-			[bash.configs.recommended] as never,
+			[shell.configs.recommended] as never,
 			"script.sh",
 		);
 
 		expect(result.output).toBe(code);
 		expect(result.fixed).toBe(false);
 		expect(result.messages.map(({ ruleId }) => ruleId)).toContain(
-			"bash/no-ls-iteration",
+			"shell/no-ls-iteration",
 		);
 		expect(result.messages.map(({ ruleId }) => ruleId)).toContain(
-			"bash/no-unquoted-expansions",
+			"shell/no-unquoted-expansions",
 		);
 	});
 });

@@ -15,7 +15,7 @@ This rule only checks `for` loops. Other uses of `ls` output are not reported.
 Examples of **incorrect** code for this rule:
 
 ```bash
-# eslint bash/no-ls-iteration: "error"
+# eslint shell/no-ls-iteration: "error"
 
 for f in $(ls); do echo "$f"; done
 
@@ -29,7 +29,7 @@ for f in $(ls | grep txt); do echo "$f"; done
 Examples of **correct** code for this rule:
 
 ```bash
-# eslint bash/no-ls-iteration: "error"
+# eslint shell/no-ls-iteration: "error"
 
 for f in *; do echo "$f"; done
 

@@ -4,9 +4,9 @@
  */
 
 import { startsWithCommand } from "./utils.js";
-import type { BashRuleDefinition } from "../types.js";
+import type { ShellRuleDefinition } from "../types.js";
 
-const rule: BashRuleDefinition<{ MessageIds: "lsIteration" }> = {
+const rule: ShellRuleDefinition<{ MessageIds: "lsIteration" }> = {
 	meta: {
 		type: "problem",
 		languages: ["shell/bash"],
@@ -15,7 +15,7 @@ const rule: BashRuleDefinition<{ MessageIds: "lsIteration" }> = {
 				"Disallow iterating over `ls` output, which breaks on special characters",
 			recommended: true,
 			dialects: ["Bash", "POSIX sh", "mksh"],
-			url: "https://github.com/eslint/bash/blob/main/docs/rules/no-ls-iteration.md",
+			url: "https://github.com/eslint/shell/blob/main/docs/rules/no-ls-iteration.md",
 		},
 		schema: [],
 		messages: {
