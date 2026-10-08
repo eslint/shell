@@ -15,7 +15,7 @@ The rule doesn't warn when `cat` actually does something, such as concatenating 
 Examples of **incorrect** code for this rule:
 
 ```bash
-# eslint bash/no-useless-cat: "error"
+# eslint shell/no-useless-cat: "error"
 
 cat file.txt | grep error
 
@@ -25,7 +25,7 @@ cat /var/log/syslog | tail -n 20 | grep kernel
 Examples of **correct** code for this rule:
 
 ```bash
-# eslint bash/no-useless-cat: "error"
+# eslint shell/no-useless-cat: "error"
 
 grep error file.txt
 
