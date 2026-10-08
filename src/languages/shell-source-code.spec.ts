@@ -3,12 +3,12 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { parseBash } from "../parser/parse.js";
+import { parseShell } from "../parser/parse.js";
 import { ShellSourceCode } from "./shell-source-code.js";
 import type { CommandNode, ProgramNode } from "../types.js";
 
 function createSourceCode(text: string): ShellSourceCode {
-	const { ast } = parseBash(text);
+	const { ast } = parseShell(text);
 
 	return new ShellSourceCode({ text, ast });
 }

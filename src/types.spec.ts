@@ -4,7 +4,7 @@
 
 import { describe, expectTypeOf, it } from "vitest";
 import type {
-	BashNode,
+	ShellNode,
 	ShellRuleDefinition,
 	CommandNode,
 	ProgramNode,
@@ -24,7 +24,7 @@ describe("types", () => {
 
 		expectTypeOf(program.type).toEqualTypeOf<"Program">();
 		expectTypeOf(program.body).toEqualTypeOf<StatementNode[]>();
-		expectTypeOf(program).toMatchTypeOf<BashNode>();
+		expectTypeOf(program).toMatchTypeOf<ShellNode>();
 	});
 
 	it("should type Command nodes as statements", () => {

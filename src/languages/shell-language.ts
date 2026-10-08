@@ -10,12 +10,13 @@ import type {
 	OkParseResult,
 	ParseResult,
 } from "@eslint/core";
-import { BashSyntaxError, parseBash } from "../parser/parse.js";
+import { ShellSyntaxError, parseShell } from "../parser/parse.js";
 import { ShellSourceCode } from "./shell-source-code.js";
 import { visitorKeys } from "../visitor-keys.js";
 import type {
 	ShellLanguageOptions,
-	BashNode,
+	ShellNode,
+	ShellVariant,
 	CommentNode,
 	ProgramNode,
 } from "../types.js";
@@ -26,6 +27,11 @@ export type ShellOkParseResult = OkParseResult<ProgramNode> & {
 	comments: CommentNode[];
 };
 
+export interface ShellLanguageConstructorOptions {
+	/** The shell dialect this language parses. Defaults to `"bash"`. */
+	variant?: ShellVariant;
+}
+
 /**
  * ESLint Language implementation for shell scripts.
  */
@@ -33,7 +39,7 @@ export class ShellLanguage implements Language<{
 	LangOptions: ShellLanguageOptions;
 	Code: ShellSourceCode;
 	RootNode: ProgramNode;
-	Node: BashNode;
+	Node: ShellNode;
 }> {
 	fileType = "text" as const;
 	lineStart = 1 as const;
@@ -41,9 +47,17 @@ export class ShellLanguage implements Language<{
 	nodeTypeKey = "type";
 	visitorKeys = visitorKeys;
 
-	defaultLanguageOptions: ShellLanguageOptions = {
-		variant: "bash",
-	};
+	defaultLanguageOptions: ShellLanguageOptions;
+
+	constructor({ variant = "bash" }: ShellLanguageConstructorOptions = {}) {
+		if (!SHELL_VARIANTS.has(variant)) {
+			throw new TypeError(
+				`Invalid shell variant "${String(variant)}". Expected "bash", "posix", or "mksh".`,
+			);
+		}
+
+		this.defaultLanguageOptions = { variant };
+	}
 
 	validateLanguageOptions(languageOptions: ShellLanguageOptions): void {
 		if (
@@ -63,14 +77,16 @@ export class ShellLanguage implements Language<{
 		const text = file.body as string;
 
 		try {
-			const { ast, comments } = parseBash(text, {
-				variant: context?.languageOptions?.variant,
+			const { ast, comments } = parseShell(text, {
+				variant:
+					context?.languageOptions?.variant ??
+					this.defaultLanguageOptions.variant,
 				path: file.path,
 			});
 
 			return { ok: true, ast, comments };
 		} catch (error) {
-			if (error instanceof BashSyntaxError) {
+			if (error instanceof ShellSyntaxError) {
 				return {
 					ok: false,
 					errors: [

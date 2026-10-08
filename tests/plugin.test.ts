@@ -12,6 +12,7 @@ function lint(
 	code: string,
 	rules: Record<string, unknown> = {},
 	languageOptions?: Record<string, unknown>,
+	language = "shell/bash",
 ): Linter.LintMessage[] {
 	const linter = new Linter();
 
@@ -21,7 +22,7 @@ function lint(
 			{
 				files: ["**/*.sh"],
 				plugins: { shell, test: testPlugin },
-				language: "shell/bash",
+				language,
 				rules: rules as never,
 				...(languageOptions ? { languageOptions } : {}),
 			},
@@ -99,6 +100,27 @@ describe("language integration", () => {
 
 		expect(posixMessages).toHaveLength(1);
 		expect(posixMessages[0]?.fatal).toBe(true);
+	});
+});
+
+describe("languages", () => {
+	it("should parse Bash syntax with the shell/bash language", () => {
+		const code = "diff <(sort a) <(sort b)\n";
+
+		expect(lint(code, {}, undefined, "shell/bash")).toEqual([]);
+		expect(lint(code, {}, undefined, "shell/posix")[0]?.fatal).toBe(true);
+	});
+
+	it("should parse POSIX sh syntax with the shell/posix language", () => {
+		expect(lint("echo hi\n", {}, undefined, "shell/posix")).toEqual([]);
+	});
+
+	it("should parse mksh syntax with the shell/mksh language", () => {
+		// `|&` with no following command starts a coprocess in mksh only.
+		const code = "cat |&\n";
+
+		expect(lint(code, {}, undefined, "shell/mksh")).toEqual([]);
+		expect(lint(code, {}, undefined, "shell/bash")[0]?.fatal).toBe(true);
 	});
 });
 

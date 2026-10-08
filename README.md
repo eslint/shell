@@ -22,42 +22,57 @@ Requires Node.js `^20.19.0 || ^22.13.0 || >=24`. Tested with ESLint v10.
 Add the plugin to your `eslint.config.js`:
 
 ```js
-import bash from "@eslint/bash";
+import shell from "@eslint/shell";
 
 export default [
 	// use the recommended rules for *.sh and *.bash files
-	bash.configs.recommended,
+	shell.configs.recommended,
 ];
 ```
 
-### Language options
+### Languages
 
-| Option    | Values                        | Default  | Description                |
-| --------- | ----------------------------- | -------- | -------------------------- |
-| `variant` | `"bash"`, `"posix"`, `"mksh"` | `"bash"` | The shell dialect to parse |
+The plugin provides one language per shell dialect:
+
+| Language      | Dialect  |
+| ------------- | -------- |
+| `shell/bash`  | Bash     |
+| `shell/posix` | POSIX sh |
+| `shell/mksh`  | mksh     |
+
+The recommended configuration uses `shell/bash`. To lint scripts written for
+another dialect, set `language` yourself:
 
 ```js
 export default [
 	{
 		files: ["**/*.sh"],
-		plugins: { bash },
-		language: "bash/bash",
-		languageOptions: { variant: "posix" },
+		plugins: { shell },
+		language: "shell/posix",
 	},
 ];
 ```
 
+### Language options
+
+| Option    | Values                        | Default                | Description                |
+| --------- | ----------------------------- | ---------------------- | -------------------------- |
+| `variant` | `"bash"`, `"posix"`, `"mksh"` | The language's dialect | The shell dialect to parse |
+
+Each language sets `variant` to its own dialect, so you only need this option
+to override the dialect of the language you chose.
+
 ## Configuration comments
 
-Standard ESLint configuration comments work inside Bash files:
+Standard ESLint configuration comments work inside shell scripts:
 
 ```bash
-# eslint-disable-next-line bash/no-backticks
+# eslint-disable-next-line shell/no-backticks
 echo `pwd`
 
-echo `pwd` # eslint-disable-line bash/no-backticks -- legacy
+echo `pwd` # eslint-disable-line shell/no-backticks -- legacy
 
-# eslint bash/no-useless-echo: "warn"
+# eslint shell/no-useless-echo: "warn"
 ```
 
 ## Syntax tree
