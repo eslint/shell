@@ -34,7 +34,7 @@ function hasPotentialExpansion(word: WordNode): boolean {
 const rule: ShellRuleDefinition<{ MessageIds: "uselessCat" }> = {
 	meta: {
 		type: "suggestion",
-		languages: ["shell/bash"],
+		languages: ["shell/bash", "shell/posix", "shell/mksh"],
 		docs: {
 			description: "Disallow useless `cat` at the start of a pipeline",
 			recommended: true,
