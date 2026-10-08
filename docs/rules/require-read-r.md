@@ -15,7 +15,7 @@ This rule is autofixable: it inserts `-r` immediately after `read`.
 Examples of **incorrect** code for this rule:
 
 ```bash
-# eslint bash/require-read-r: "error"
+# eslint shell/require-read-r: "error"
 
 read line
 
@@ -27,7 +27,7 @@ while read line; do echo "$line"; done < input.txt
 Examples of **correct** code for this rule:
 
 ```bash
-# eslint bash/require-read-r: "error"
+# eslint shell/require-read-r: "error"
 
 read -r line
 
