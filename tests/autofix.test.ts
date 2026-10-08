@@ -33,4 +33,12 @@ describe("autofix", () => {
 		expect(result.output).toBe("echo $(pwd) $(date)\n");
 		expect(result.messages).toEqual([]);
 	});
+
+	it("should quote unquoted expansions", () => {
+		const result = fix("cp $src $dest\n", {
+			"shell/no-unquoted-expansions": "error",
+		});
+
+		expect(result.output).toBe('cp "$src" "$dest"\n');
+	});
 });
