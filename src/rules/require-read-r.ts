@@ -11,7 +11,7 @@ const optionsWithArguments = new Set(["a", "d", "i", "n", "N", "p", "t", "u"]);
 const rule: ShellRuleDefinition<{ MessageIds: "missingR" }> = {
 	meta: {
 		type: "problem",
-		languages: ["shell/bash"],
+		languages: ["shell/bash", "shell/posix", "shell/mksh"],
 		docs: {
 			description: "Require `read -r` so backslashes are not mangled",
 			recommended: true,
