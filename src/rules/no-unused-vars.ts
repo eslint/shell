@@ -71,7 +71,7 @@ const rule: ShellRuleDefinition<{
 }> = {
 	meta: {
 		type: "problem",
-		languages: ["shell/bash"],
+		languages: ["shell/bash", "shell/posix", "shell/mksh"],
 		docs: {
 			description: "Disallow variables that are assigned but never used",
 			recommended: true,
