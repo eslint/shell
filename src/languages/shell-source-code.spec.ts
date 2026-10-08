@@ -1,19 +1,19 @@
 /**
- * @fileoverview Unit tests for BashSourceCode.
+ * @fileoverview Unit tests for ShellSourceCode.
  */
 
 import { describe, expect, it } from "vitest";
 import { parseBash } from "../parser/parse.js";
-import { BashSourceCode } from "./bash-source-code.js";
+import { ShellSourceCode } from "./shell-source-code.js";
 import type { CommandNode, ProgramNode } from "../types.js";
 
-function createSourceCode(text: string): BashSourceCode {
+function createSourceCode(text: string): ShellSourceCode {
 	const { ast } = parseBash(text);
 
-	return new BashSourceCode({ text, ast });
+	return new ShellSourceCode({ text, ast });
 }
 
-describe("BashSourceCode", () => {
+describe("ShellSourceCode", () => {
 	describe("basics", () => {
 		it("should expose text, ast, and comments", () => {
 			const text = "# note\necho hi\n";
@@ -124,10 +124,10 @@ describe("BashSourceCode", () => {
 		it("should find inline config comments", () => {
 			const sourceCode = createSourceCode(
 				[
-					"# eslint-disable-next-line bash/no-backticks",
+					"# eslint-disable-next-line shell/no-backticks",
 					"echo `pwd`",
 					"# a normal comment",
-					"# eslint bash/no-useless-echo: 'off'",
+					"# eslint shell/no-useless-echo: 'off'",
 					"",
 				].join("\n"),
 			);
@@ -139,11 +139,11 @@ describe("BashSourceCode", () => {
 		it("should produce disable directives", () => {
 			const sourceCode = createSourceCode(
 				[
-					"# eslint-disable bash/no-backticks -- legacy file",
+					"# eslint-disable shell/no-backticks -- legacy file",
 					"echo `pwd`",
-					"# eslint-enable bash/no-backticks",
+					"# eslint-enable shell/no-backticks",
 					"# eslint-disable-line",
-					"# eslint-disable-next-line bash/no-unused-vars",
+					"# eslint-disable-next-line shell/no-unused-vars",
 					"",
 				].join("\n"),
 			);
@@ -156,26 +156,26 @@ describe("BashSourceCode", () => {
 				"disable-line",
 				"disable-next-line",
 			]);
-			expect(directives[0]?.value).toBe("bash/no-backticks");
+			expect(directives[0]?.value).toBe("shell/no-backticks");
 			expect(directives[0]?.justification).toBe("legacy file");
 		});
 
 		it("should apply inline rule configuration", () => {
 			const sourceCode = createSourceCode(
-				'# eslint bash/no-backticks: "warn"\necho hi\n',
+				'# eslint shell/no-backticks: "warn"\necho hi\n',
 			);
 			const { configs, problems } = sourceCode.applyInlineConfig();
 
 			expect(problems).toHaveLength(0);
 			expect(configs).toHaveLength(1);
 			expect(configs[0]?.config.rules).toEqual({
-				"bash/no-backticks": "warn",
+				"shell/no-backticks": "warn",
 			});
 		});
 
 		it("should report problems for malformed inline config", () => {
 			const sourceCode = createSourceCode(
-				"# eslint bash/no-backticks: oops(\necho hi\n",
+				"# eslint shell/no-backticks: oops(\necho hi\n",
 			);
 			const { problems } = sourceCode.applyInlineConfig();
 
@@ -184,7 +184,7 @@ describe("BashSourceCode", () => {
 	});
 });
 
-describe("BashSourceCode construction", () => {
+describe("ShellSourceCode construction", () => {
 	it("should accept a manually built program", () => {
 		const ast: ProgramNode = {
 			type: "Program",
@@ -193,7 +193,7 @@ describe("BashSourceCode construction", () => {
 			body: [],
 			comments: [],
 		};
-		const sourceCode = new BashSourceCode({ text: "", ast });
+		const sourceCode = new ShellSourceCode({ text: "", ast });
 
 		expect(sourceCode.ast).toBe(ast);
 	});

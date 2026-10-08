@@ -4,7 +4,7 @@
 
 import { describe, expect, it } from "vitest";
 import { Linter } from "eslint";
-import bash from "../src/index.js";
+import shell from "../src/index.js";
 import testPlugin from "./fixtures/test-plugin.js";
 
 function lint(
@@ -19,8 +19,8 @@ function lint(
 		[
 			{
 				files: ["**/*.sh"],
-				plugins: { bash, test: testPlugin },
-				language: "bash/bash",
+				plugins: { shell, test: testPlugin },
+				language: "shell/bash",
 				linterOptions,
 				rules: rules as never,
 			},

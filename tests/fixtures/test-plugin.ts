@@ -3,14 +3,14 @@
  * language independently of the rules shipped by the plugin.
  */
 
-import type { BashRuleDefinition, CommandNode } from "../../src/index.js";
+import type { ShellRuleDefinition, CommandNode } from "../../src/index.js";
 
 /**
  * Creates a rule that reports every simple command with the given name.
  */
 function createCommandRule(
 	commandName: string,
-): BashRuleDefinition<{ MessageIds: "found" }> {
+): ShellRuleDefinition<{ MessageIds: "found" }> {
 	return {
 		meta: {
 			type: "problem",

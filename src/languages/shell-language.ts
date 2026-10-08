@@ -1,6 +1,6 @@
 /**
- * @fileoverview The BashLanguage class, the ESLint Language implementation
- * for Bash files.
+ * @fileoverview The ShellLanguage class, the ESLint Language implementation
+ * for shell scripts.
  */
 
 import type {
@@ -11,10 +11,10 @@ import type {
 	ParseResult,
 } from "@eslint/core";
 import { BashSyntaxError, parseBash } from "../parser/parse.js";
-import { BashSourceCode } from "./bash-source-code.js";
+import { ShellSourceCode } from "./shell-source-code.js";
 import { visitorKeys } from "../visitor-keys.js";
 import type {
-	BashLanguageOptions,
+	ShellLanguageOptions,
 	BashNode,
 	CommentNode,
 	ProgramNode,
@@ -22,16 +22,16 @@ import type {
 
 const SHELL_VARIANTS = new Set(["bash", "posix", "mksh"]);
 
-export type BashOkParseResult = OkParseResult<ProgramNode> & {
+export type ShellOkParseResult = OkParseResult<ProgramNode> & {
 	comments: CommentNode[];
 };
 
 /**
- * ESLint Language implementation for Bash.
+ * ESLint Language implementation for shell scripts.
  */
-export class BashLanguage implements Language<{
-	LangOptions: BashLanguageOptions;
-	Code: BashSourceCode;
+export class ShellLanguage implements Language<{
+	LangOptions: ShellLanguageOptions;
+	Code: ShellSourceCode;
 	RootNode: ProgramNode;
 	Node: BashNode;
 }> {
@@ -41,11 +41,11 @@ export class BashLanguage implements Language<{
 	nodeTypeKey = "type";
 	visitorKeys = visitorKeys;
 
-	defaultLanguageOptions: BashLanguageOptions = {
+	defaultLanguageOptions: ShellLanguageOptions = {
 		variant: "bash",
 	};
 
-	validateLanguageOptions(languageOptions: BashLanguageOptions): void {
+	validateLanguageOptions(languageOptions: ShellLanguageOptions): void {
 		if (
 			languageOptions.variant !== undefined &&
 			!SHELL_VARIANTS.has(languageOptions.variant as string)
@@ -58,7 +58,7 @@ export class BashLanguage implements Language<{
 
 	parse(
 		file: File,
-		context?: LanguageContext<BashLanguageOptions>,
+		context?: LanguageContext<ShellLanguageOptions>,
 	): ParseResult<ProgramNode> {
 		const text = file.body as string;
 
@@ -101,9 +101,9 @@ export class BashLanguage implements Language<{
 
 	createSourceCode(
 		file: File,
-		parseResult: BashOkParseResult,
-	): BashSourceCode {
-		return new BashSourceCode({
+		parseResult: ShellOkParseResult,
+	): ShellSourceCode {
+		return new ShellSourceCode({
 			text: file.body as string,
 			ast: parseResult.ast,
 		});

@@ -1,6 +1,6 @@
 /**
- * @fileoverview The BashSourceCode class, the SourceCode implementation that
- * ESLint uses to interact with a parsed Bash file.
+ * @fileoverview The ShellSourceCode class, the SourceCode implementation that
+ * ESLint uses to interact with a parsed shell script.
  */
 
 import {
@@ -19,7 +19,7 @@ import type {
 } from "@eslint/core";
 import { visitorKeys } from "../visitor-keys.js";
 import type {
-	BashLanguageOptions,
+	ShellLanguageOptions,
 	BashNode,
 	CommentNode,
 	ProgramNode,
@@ -40,18 +40,18 @@ const DIRECTIVE_TYPES = new Map<string, DirectiveType>([
 	["eslint-disable-next-line", "disable-next-line"],
 ]);
 
-export interface BashSourceCodeOptions {
+export interface ShellSourceCodeOptions {
 	text: string;
 	ast: ProgramNode;
 }
 
 /**
- * SourceCode implementation for Bash files. Nodes carry `start`/`end`
+ * SourceCode implementation for shell scripts. Nodes carry `start`/`end`
  * character offsets; `getLoc()` and `getRange()` derive positions from
  * those offsets, so nodes have no `loc` or `range` properties.
  */
-export class BashSourceCode extends TextSourceCodeBase<{
-	LangOptions: BashLanguageOptions;
+export class ShellSourceCode extends TextSourceCodeBase<{
+	LangOptions: ShellLanguageOptions;
 	RootNode: ProgramNode;
 	SyntaxElementWithLoc: BashNode;
 	ConfigNode: CommentNode;
@@ -64,7 +64,7 @@ export class BashSourceCode extends TextSourceCodeBase<{
 	#lineOffsets: number[] | null = null;
 	#inlineConfigComments: CommentNode[] | null = null;
 
-	constructor({ text, ast }: BashSourceCodeOptions) {
+	constructor({ text, ast }: ShellSourceCodeOptions) {
 		super({ text, ast });
 		this.comments = ast.comments;
 	}
@@ -195,7 +195,7 @@ export class BashSourceCode extends TextSourceCodeBase<{
 
 	/**
 	 * Returns directives for disabling/enabling rules found in comments,
-	 * such as `# eslint-disable-next-line bash/no-backticks`.
+	 * such as `# eslint-disable-next-line shell/no-backticks`.
 	 */
 	getDisableDirectives(): {
 		directives: Directive[];

@@ -5,7 +5,7 @@
 import { describe, expectTypeOf, it } from "vitest";
 import type {
 	BashNode,
-	BashRuleDefinition,
+	ShellRuleDefinition,
 	CommandNode,
 	ProgramNode,
 	StatementNode,
@@ -40,7 +40,7 @@ describe("types", () => {
 
 	it("should type rule definitions", () => {
 		expectTypeOf<
-			BashRuleDefinition<{ MessageIds: "oops" }>
+			ShellRuleDefinition<{ MessageIds: "oops" }>
 		>().toHaveProperty("create");
 	});
 });

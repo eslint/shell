@@ -1,10 +1,10 @@
 /**
- * @fileoverview Unit tests for BashLanguage.
+ * @fileoverview Unit tests for ShellLanguage.
  */
 
 import { describe, expect, it } from "vitest";
-import { BashLanguage } from "./bash-language.js";
-import { BashSourceCode } from "./bash-source-code.js";
+import { ShellLanguage } from "./shell-language.js";
+import { ShellSourceCode } from "./shell-source-code.js";
 import type { File } from "@eslint/core";
 
 function createFile(body: string): File {
@@ -16,8 +16,8 @@ function createFile(body: string): File {
 	};
 }
 
-describe("BashLanguage", () => {
-	const language = new BashLanguage();
+describe("ShellLanguage", () => {
+	const language = new ShellLanguage();
 
 	describe("metadata", () => {
 		it("should describe itself as a text language", () => {
@@ -98,7 +98,7 @@ describe("BashLanguage", () => {
 	});
 
 	describe("createSourceCode", () => {
-		it("should create a BashSourceCode", () => {
+		it("should create a ShellSourceCode", () => {
 			const file = createFile("echo hi\n");
 			const result = language.parse(file);
 
@@ -110,7 +110,7 @@ describe("BashLanguage", () => {
 					comments: [],
 				});
 
-				expect(sourceCode).toBeInstanceOf(BashSourceCode);
+				expect(sourceCode).toBeInstanceOf(ShellSourceCode);
 				expect(sourceCode.text).toBe("echo hi\n");
 			}
 		});
