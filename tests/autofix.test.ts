@@ -49,4 +49,18 @@ describe("autofix", () => {
 
 		expect(result.output).toBe('read -r line\necho "$line"\n');
 	});
+
+	it("should apply fixes from multiple rules at once", () => {
+		const result = fix("read name\necho `pwd` $name\n", {
+			"shell/require-read-r": "error",
+			"shell/no-backticks": "error",
+			"shell/no-unquoted-expansions": "error",
+		});
+
+		expect(result.fixed).toBe(true);
+
+		// The backticks become $(pwd) in the first pass, and the second
+		// pass quotes the now-unquoted substitution.
+		expect(result.output).toBe('read -r name\necho "$(pwd)" "$name"\n');
+	});
 });
