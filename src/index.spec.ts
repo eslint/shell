@@ -41,6 +41,7 @@ describe("plugin", () => {
 			"no-unquoted-expansions",
 			"no-useless-cat",
 			"no-useless-echo",
+			"no-variables-in-printf-format",
 			"require-cd-guard",
 			"require-read-r",
 		]);
