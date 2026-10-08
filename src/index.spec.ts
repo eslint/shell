@@ -3,7 +3,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import plugin, { BashSyntaxError, parseBash } from "./index.js";
+import plugin, { ShellSyntaxError, parseShell } from "./index.js";
 
 describe("plugin", () => {
 	it("should expose plugin metadata", () => {
@@ -13,7 +13,7 @@ describe("plugin", () => {
 	});
 
 	it("should export the parser", () => {
-		expect(parseBash("echo hi\n").ast.type).toBe("Program");
-		expect(() => parseBash("if then fi\n")).toThrow(BashSyntaxError);
+		expect(parseShell("echo hi\n").ast.type).toBe("Program");
+		expect(() => parseShell("if then fi\n")).toThrow(ShellSyntaxError);
 	});
 });

@@ -1,6 +1,6 @@
-# Bash Syntax Tree Format
+# Shell Syntax Tree Format
 
-`@eslint/bash` parses Bash source code into an ESTree-style syntax tree by
+`@eslint/shell` parses shell source code into an ESTree-style syntax tree by
 wrapping the [mvdan-sh](https://www.npmjs.com/package/mvdan-sh) parser (a
 JavaScript build of [mvdan.cc/sh](https://github.com/mvdan/sh), the parser
 behind `shfmt`) and translating its output.
@@ -10,7 +10,7 @@ behind `shfmt`) and translating its output.
 Every node has three common properties:
 
 ```ts
-interface BashNodeBase {
+interface ShellNodeBase {
 	type: string;
 	start: number; // 0-based character offset, inclusive
 	end: number; // 0-based character offset, exclusive
@@ -31,7 +31,7 @@ Lines and columns are 1-based. Offsets are JavaScript character offsets
 ### Heredoc bodies
 
 Nodes are otherwise nested the way ESTree nodes are: a child's range sits
-inside its parent's. Heredocs break that rule, because Bash splits the
+inside its parent's. Heredocs break that rule, because the shell splits the
 construct in two. The `<<EOF` operator appears inline, but its body cannot
 begin until after the newline, so the body sits somewhere the enclosing
 nodes do not necessarily reach.
@@ -99,7 +99,7 @@ Consequences for rule authors:
 Every node usable in statement position also carries:
 
 ```ts
-interface StatementBase extends BashNodeBase {
+interface StatementBase extends ShellNodeBase {
 	redirects: Redirect[]; // e.g. `> file`, `2>&1`, heredocs
 	negated: boolean; // `! cmd`
 	background: boolean; // `cmd &`
@@ -112,13 +112,13 @@ The root node. `comments` contains every comment in the file in source
 order; comments are not part of the traversed tree.
 
 ```ts
-interface Program extends BashNodeBase {
+interface Program extends ShellNodeBase {
 	type: "Program";
 	body: Statement[];
 	comments: Comment[];
 }
 
-interface Comment extends BashNodeBase {
+interface Comment extends ShellNodeBase {
 	type: "Comment";
 	text: string; // text after `#`
 }
@@ -197,7 +197,7 @@ interface IfStatement extends StatementBase {
 	alternate: IfStatement | ElseClause | null;
 }
 
-interface ElseClause extends BashNodeBase {
+interface ElseClause extends ShellNodeBase {
 	type: "ElseClause";
 	body: Statement[];
 }
@@ -246,7 +246,7 @@ interface CaseStatement extends StatementBase {
 	cases: CaseClause[];
 }
 
-interface CaseClause extends BashNodeBase {
+interface CaseClause extends ShellNodeBase {
 	type: "CaseClause";
 	patterns: Word[];
 	body: Statement[];
@@ -277,20 +277,20 @@ interface TestCommand extends StatementBase {
 	expression: TestExpression;
 }
 
-interface BinaryTest extends BashNodeBase {
+interface BinaryTest extends ShellNodeBase {
 	type: "BinaryTest";
 	operator: string; // "==", "!=", "=~", "-eq", "&&", ...
 	left: TestExpression;
 	right: TestExpression;
 }
 
-interface UnaryTest extends BashNodeBase {
+interface UnaryTest extends ShellNodeBase {
 	type: "UnaryTest";
 	operator: string; // "-f", "-n", "!", ...
 	argument: TestExpression;
 }
 
-interface ParenthesizedTest extends BashNodeBase {
+interface ParenthesizedTest extends ShellNodeBase {
 	type: "ParenthesizedTest";
 	expression: TestExpression;
 }
@@ -311,21 +311,21 @@ interface LetCommand extends StatementBase {
 	expressions: ArithmeticExpression[];
 }
 
-interface BinaryArithmetic extends BashNodeBase {
+interface BinaryArithmetic extends ShellNodeBase {
 	type: "BinaryArithmetic";
 	operator: string; // "+", "<=", "=", "?", ":", ...
 	left: ArithmeticExpression;
 	right: ArithmeticExpression;
 }
 
-interface UnaryArithmetic extends BashNodeBase {
+interface UnaryArithmetic extends ShellNodeBase {
 	type: "UnaryArithmetic";
 	operator: string; // "++", "--", "-", "!", "~", "+"
 	prefix: boolean; // false for `x++`
 	argument: ArithmeticExpression;
 }
 
-interface ParenthesizedArithmetic extends BashNodeBase {
+interface ParenthesizedArithmetic extends ShellNodeBase {
 	type: "ParenthesizedArithmetic";
 	expression: ArithmeticExpression;
 }
@@ -362,7 +362,7 @@ A `Word` is a sequence of parts that are concatenated after expansion.
 `echo pre"mid"$x` has one word with three parts.
 
 ```ts
-interface Word extends BashNodeBase {
+interface Word extends ShellNodeBase {
 	type: "Word";
 	parts: WordPart[];
 }
@@ -383,7 +383,7 @@ type WordPart =
 Unquoted text, including glob characters (`*.txt`).
 
 ```ts
-interface Literal extends BashNodeBase {
+interface Literal extends ShellNodeBase {
 	type: "Literal";
 	value: string;
 }
@@ -392,13 +392,13 @@ interface Literal extends BashNodeBase {
 ### Quoted strings
 
 ```ts
-interface SingleQuotedString extends BashNodeBase {
+interface SingleQuotedString extends ShellNodeBase {
 	type: "SingleQuotedString";
 	value: string; // text between the quotes
 	dollar: boolean; // true for $'...'
 }
 
-interface DoubleQuotedString extends BashNodeBase {
+interface DoubleQuotedString extends ShellNodeBase {
 	type: "DoubleQuotedString";
 	parts: WordPart[]; // literals and expansions
 	dollar: boolean; // true for $"..."
@@ -411,7 +411,7 @@ Covers `$name`, `${name}`, and all `${...}` operator forms. The `operator`
 is the operator text exactly as written in the source.
 
 ```ts
-interface ParameterExpansion extends BashNodeBase {
+interface ParameterExpansion extends ShellNodeBase {
 	type: "ParameterExpansion";
 	name: string; // "foo", "1", "@", "?", ...
 	braced: boolean; // ${x} vs $x
@@ -444,24 +444,24 @@ Examples:
 ### Substitutions
 
 ```ts
-interface CommandSubstitution extends BashNodeBase {
+interface CommandSubstitution extends ShellNodeBase {
 	type: "CommandSubstitution";
 	body: Statement[];
 	backquotes: boolean; // `...` vs $(...)
 }
 
-interface ProcessSubstitution extends BashNodeBase {
+interface ProcessSubstitution extends ShellNodeBase {
 	type: "ProcessSubstitution";
 	operator: "<(" | ">(";
 	body: Statement[];
 }
 
-interface ArithmeticExpansion extends BashNodeBase {
+interface ArithmeticExpansion extends ShellNodeBase {
 	type: "ArithmeticExpansion"; // $(( ... ))
 	expression: ArithmeticExpression | null;
 }
 
-interface ExtendedGlob extends BashNodeBase {
+interface ExtendedGlob extends ShellNodeBase {
 	type: "ExtendedGlob"; // @(a|b), *(x), +(x), ?(x), !(x)
 	operator: "@(" | "*(" | "+(" | "?(" | "!(";
 	pattern: string;
@@ -471,7 +471,7 @@ interface ExtendedGlob extends BashNodeBase {
 ## Assignments and redirects
 
 ```ts
-interface VariableAssignment extends BashNodeBase {
+interface VariableAssignment extends ShellNodeBase {
 	type: "VariableAssignment";
 	name: Identifier | null;
 	index: ArithmeticExpression | null; // arr[i]=x
@@ -480,23 +480,23 @@ interface VariableAssignment extends BashNodeBase {
 	append: boolean; // x+=y
 }
 
-interface ArrayExpression extends BashNodeBase {
+interface ArrayExpression extends ShellNodeBase {
 	type: "ArrayExpression";
 	elements: ArrayElement[];
 }
 
-interface ArrayElement extends BashNodeBase {
+interface ArrayElement extends ShellNodeBase {
 	type: "ArrayElement";
 	index: ArithmeticExpression | null; // ([5]=x)
 	value: Word | null;
 }
 
-interface Identifier extends BashNodeBase {
+interface Identifier extends ShellNodeBase {
 	type: "Identifier";
 	name: string;
 }
 
-interface Redirect extends BashNodeBase {
+interface Redirect extends ShellNodeBase {
 	type: "Redirect";
 	operator: string; // "<", ">", ">>", "<<", "<<-", "<<<", "<&", ">&", "&>", ...
 	fd: number | null; // 2 in `2>err`

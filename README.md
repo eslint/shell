@@ -26,9 +26,9 @@ properties; use `sourceCode.getRange(node)` and `sourceCode.getLoc(node)`.
 The parser is also exported directly:
 
 ```js
-import { parseBash } from "@eslint/bash";
+import { parseShell } from "@eslint/shell";
 
-const { ast, comments } = parseBash('echo "hello"\n');
+const { ast, comments } = parseShell('echo "hello"\n');
 ```
 
 ## Development
