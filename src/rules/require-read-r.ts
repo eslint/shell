@@ -1,0 +1,102 @@
+/**
+ * @fileoverview Rule to require the `-r` flag when using `read`.
+ * Mirrors ShellCheck SC2162.
+ */
+
+import { getCommandName, getStaticText } from "./utils.js";
+import type { ShellRuleDefinition } from "../types.js";
+
+const optionsWithArguments = new Set(["a", "d", "i", "n", "N", "p", "t", "u"]);
+
+const rule: ShellRuleDefinition<{ MessageIds: "missingR" }> = {
+	meta: {
+		type: "problem",
+		languages: ["shell/bash", "shell/posix", "shell/mksh"],
+		docs: {
+			description: "Require `read -r` so backslashes are not mangled",
+			recommended: true,
+			dialects: ["Bash", "POSIX sh", "mksh"],
+			url: "https://github.com/eslint/shell/blob/main/docs/rules/require-read-r.md",
+		},
+		fixable: "code",
+		schema: [],
+		messages: {
+			missingR:
+				"read without -r will mangle backslashes. (ShellCheck SC2162)",
+		},
+	},
+
+	create(context) {
+		return {
+			Command(node) {
+				if (getCommandName(node) !== "read" || !node.name) {
+					return;
+				}
+
+				let hasRawOption = false;
+
+				for (let index = 0; index < node.arguments.length; index++) {
+					const argument = node.arguments[index];
+					if (!argument) {
+						continue;
+					}
+
+					const text = getStaticText(argument);
+					if (text === "--") {
+						break;
+					}
+
+					if (
+						text === null ||
+						!text.startsWith("-") ||
+						text === "-"
+					) {
+						continue;
+					}
+
+					for (
+						let optionIndex = 1;
+						optionIndex < text.length;
+						optionIndex++
+					) {
+						const option = text[optionIndex];
+						if (!option) {
+							break;
+						}
+
+						if (option === "r") {
+							hasRawOption = true;
+							break;
+						}
+
+						if (optionsWithArguments.has(option)) {
+							if (optionIndex === text.length - 1) {
+								index++;
+							}
+
+							break;
+						}
+					}
+
+					if (hasRawOption) {
+						break;
+					}
+				}
+
+				if (hasRawOption) {
+					return;
+				}
+
+				const name = node.name;
+
+				context.report({
+					node: name,
+					messageId: "missingR",
+					fix: fixer => fixer.insertTextAfter(name, " -r"),
+				});
+			},
+		};
+	},
+};
+
+export default rule;
