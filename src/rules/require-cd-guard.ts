@@ -11,7 +11,7 @@ const rule: ShellRuleDefinition<{
 }> = {
 	meta: {
 		type: "problem",
-		languages: ["shell/bash"],
+		languages: ["shell/bash", "shell/posix", "shell/mksh"],
 		docs: {
 			description:
 				"Require `cd` failures to be handled, e.g. `cd ... || exit`",
