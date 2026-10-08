@@ -3,7 +3,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { parseBash } from "../parser/parse.js";
+import { parseShell } from "../parser/parse.js";
 import {
 	getCommandName,
 	getExpansions,
@@ -13,7 +13,7 @@ import {
 import type { CommandNode, WordNode } from "../types.js";
 
 function firstCommand(text: string): CommandNode {
-	return parseBash(text).ast.body[0] as CommandNode;
+	return parseShell(text).ast.body[0] as CommandNode;
 }
 
 function firstArgument(text: string): WordNode {
@@ -91,7 +91,7 @@ describe("isCommandNamed", () => {
 	});
 
 	it("should not match non-command statements", () => {
-		const statement = parseBash("a | b\n").ast.body[0]!;
+		const statement = parseShell("a | b\n").ast.body[0]!;
 
 		expect(isCommandNamed(statement, "a")).toBe(false);
 	});

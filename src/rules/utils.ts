@@ -1,5 +1,5 @@
 /**
- * @fileoverview Shared helpers for Bash rules.
+ * @fileoverview Shared helpers for shell rules.
  */
 
 import type {
