@@ -4,9 +4,9 @@
  */
 
 import { getCommandName, getExpansions, getStaticText } from "./utils.js";
-import type { BashRuleDefinition } from "../types.js";
+import type { ShellRuleDefinition } from "../types.js";
 
-const rule: BashRuleDefinition<{ MessageIds: "variableInFormat" }> = {
+const rule: ShellRuleDefinition<{ MessageIds: "variableInFormat" }> = {
 	meta: {
 		type: "problem",
 		languages: ["shell/bash"],
@@ -15,7 +15,7 @@ const rule: BashRuleDefinition<{ MessageIds: "variableInFormat" }> = {
 				"Disallow variables in the printf format string; use %s placeholders instead",
 			recommended: true,
 			dialects: ["Bash", "POSIX sh", "mksh"],
-			url: "https://github.com/eslint/bash/blob/main/docs/rules/no-variables-in-printf-format.md",
+			url: "https://github.com/eslint/shell/blob/main/docs/rules/no-variables-in-printf-format.md",
 		},
 		schema: [],
 		messages: {
