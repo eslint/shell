@@ -61,7 +61,6 @@ export class ShellSourceCode extends TextSourceCodeBase<{
 
 	#parents = new Map<ShellNode, ShellNode>();
 	#steps: VisitNodeStep[] | null = null;
-	#lineOffsets: number[] | null = null;
 	#inlineConfigComments: CommentNode[] | null = null;
 
 	constructor({ text, ast }: ShellSourceCodeOptions) {
@@ -69,51 +68,26 @@ export class ShellSourceCode extends TextSourceCodeBase<{
 		this.comments = ast.comments;
 	}
 
-	/** Character offsets at which each line starts. */
-	get #lineStarts(): number[] {
-		if (!this.#lineOffsets) {
-			const offsets = [0];
-
-			for (let i = 0; i < this.text.length; i++) {
-				if (this.text[i] === "\n") {
-					offsets.push(i + 1);
-				}
-			}
-
-			this.#lineOffsets = offsets;
-		}
-
-		return this.#lineOffsets;
-	}
-
-	/**
-	 * Converts a character offset into a 1-based line/column pair.
-	 */
-	#locFromIndex(index: number): { line: number; column: number } {
-		const lineStarts = this.#lineStarts;
-		let low = 0;
-		let high = lineStarts.length - 1;
-
-		while (low < high) {
-			const mid = (low + high + 1) >> 1;
-
-			if ((lineStarts[mid] as number) <= index) {
-				low = mid;
-			} else {
-				high = mid - 1;
-			}
-		}
-
-		return {
-			line: low + 1,
-			column: index - (lineStarts[low] as number) + 1,
-		};
-	}
-
 	getLoc(node: ShellNode): SourceLocation {
+		/*
+		 * `getLocFromIndex()` asks for the location of the root node, so
+		 * that one is computed directly. `Program` always spans the file.
+		 */
+		if (node === this.ast) {
+			const lines = this.lines;
+
+			return {
+				start: { line: 1, column: 1 },
+				end: {
+					line: lines.length,
+					column: (lines.at(-1) as string).length + 1,
+				},
+			};
+		}
+
 		return {
-			start: this.#locFromIndex(node.start),
-			end: this.#locFromIndex(node.end),
+			start: this.getLocFromIndex(node.start),
+			end: this.getLocFromIndex(node.end),
 		};
 	}
 
