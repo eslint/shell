@@ -4,7 +4,7 @@ Disallow expansion-like syntax inside single quotes, where it is not expanded.
 
 ## Background
 
-Inside single quotes, Bash treats every character literally. Variables, command substitutions, and backticks are not expanded, so `'$HOME'` is the five characters `$HOME`, not your home directory. Writing an expansion inside single quotes is usually a mistake where double quotes were intended.
+Inside single quotes, the shell treats every character literally. Variables, command substitutions, and backticks are not expanded, so `'$HOME'` is the five characters `$HOME`, not your home directory. Writing an expansion inside single quotes is usually a mistake where double quotes were intended.
 
 ## Rule Details
 
@@ -19,7 +19,7 @@ The rule does not warn about:
 Examples of **incorrect** code for this rule:
 
 ```bash
-# eslint bash/no-expansions-in-single-quotes: "error"
+# eslint shell/no-expansions-in-single-quotes: "error"
 
 echo 'Hello, $USER'
 
@@ -33,7 +33,7 @@ echo 'Run `make` first'
 Examples of **correct** code for this rule:
 
 ```bash
-# eslint bash/no-expansions-in-single-quotes: "error"
+# eslint shell/no-expansions-in-single-quotes: "error"
 
 echo "Hello, $USER"
 
