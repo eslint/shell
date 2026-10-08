@@ -34,7 +34,20 @@ describe("plugin", () => {
 	it("should expose all rules", () => {
 		const ruleIds = Object.keys(plugin.rules);
 
-		expect(ruleIds.sort()).toEqual([]);
+		expect(ruleIds.sort()).toEqual(["no-backticks"]);
+	});
+
+	it("should give every rule meta docs and messages", () => {
+		for (const [ruleId, rule] of Object.entries(plugin.rules)) {
+			expect(rule.meta?.docs?.description, ruleId).toBeTruthy();
+			expect(rule.meta?.docs?.recommended, ruleId).toBe(true);
+			expect(rule.meta?.messages, ruleId).toBeTruthy();
+			expect(rule.meta?.schema, ruleId).toBeDefined();
+			expect(rule.meta?.docs?.url, ruleId).toBe(
+				`https://github.com/eslint/shell/blob/main/docs/rules/${ruleId}.md`,
+			);
+			expect(typeof rule.create, ruleId).toBe("function");
+		}
 	});
 
 	describe("recommended config", () => {
