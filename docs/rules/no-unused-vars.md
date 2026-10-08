@@ -38,7 +38,7 @@ The rule analyzes the whole file at once and doesn't model function scope. For e
 Examples of **incorrect** code for this rule:
 
 ```bash
-# eslint bash/no-unused-vars: "error"
+# eslint shell/no-unused-vars: "error"
 
 count=0
 
@@ -52,7 +52,7 @@ for i in 1 2 3; do echo "hello"; done
 Examples of **correct** code for this rule:
 
 ```bash
-# eslint bash/no-unused-vars: "error"
+# eslint shell/no-unused-vars: "error"
 
 name="world"
 echo "Hello, $name"
@@ -80,7 +80,7 @@ This rule has one object option:
 Examples of **correct** code for this rule with `{ "allowed": ["VERSION"] }`:
 
 ```bash
-# eslint bash/no-unused-vars: ["error", { "allowed": ["VERSION"] }]
+# eslint shell/no-unused-vars: ["error", { "allowed": ["VERSION"] }]
 
 VERSION=1.2.3
 ```

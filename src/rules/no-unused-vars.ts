@@ -6,7 +6,7 @@
 import { getCommandName, getStaticText } from "./utils.js";
 import type {
 	ArithmeticExpressionNode,
-	BashRuleDefinition,
+	ShellRuleDefinition,
 	IdentifierNode,
 	TestExpressionNode,
 	WordNode,
@@ -65,7 +65,7 @@ const ARITHMETIC_TEST_OPERATORS = new Set([
 /** Arithmetic operators that assign to their left operand. */
 const ARITHMETIC_ASSIGNMENT = /^(?:=|\+=|-=|\*=|\/=|%=|<<=|>>=|&=|\^=|\|=)$/u;
 
-const rule: BashRuleDefinition<{
+const rule: ShellRuleDefinition<{
 	MessageIds: "unusedVariable";
 	RuleOptions: [{ allowed?: string[] }?];
 }> = {
@@ -76,7 +76,7 @@ const rule: BashRuleDefinition<{
 			description: "Disallow variables that are assigned but never used",
 			recommended: true,
 			dialects: ["Bash", "POSIX sh", "mksh"],
-			url: "https://github.com/eslint/bash/blob/main/docs/rules/no-unused-vars.md",
+			url: "https://github.com/eslint/shell/blob/main/docs/rules/no-unused-vars.md",
 		},
 		schema: [
 			{
