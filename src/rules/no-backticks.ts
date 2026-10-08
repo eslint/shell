@@ -8,7 +8,7 @@ import type { ShellRuleDefinition } from "../types.js";
 const rule: ShellRuleDefinition<{ MessageIds: "useDollarParen" }> = {
 	meta: {
 		type: "suggestion",
-		languages: ["shell/bash"],
+		languages: ["shell/bash", "shell/posix", "shell/mksh"],
 		docs: {
 			description:
 				"Disallow legacy backtick command substitution in favor of `$(...)`",
