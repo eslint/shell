@@ -15,7 +15,7 @@ Variables in the arguments after the format are fine. Arithmetic expansions such
 Examples of **incorrect** code for this rule:
 
 ```bash
-# eslint bash/no-variables-in-printf-format: "error"
+# eslint shell/no-variables-in-printf-format: "error"
 
 printf "$message"
 
@@ -29,7 +29,7 @@ printf "Files: $(ls | wc -l)\n"
 Examples of **correct** code for this rule:
 
 ```bash
-# eslint bash/no-variables-in-printf-format: "error"
+# eslint shell/no-variables-in-printf-format: "error"
 
 printf '%s\n' "$message"
 
