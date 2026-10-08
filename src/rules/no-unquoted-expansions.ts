@@ -19,7 +19,7 @@ const rule: ShellRuleDefinition<{
 }> = {
 	meta: {
 		type: "problem",
-		languages: ["shell/bash"],
+		languages: ["shell/bash", "shell/posix", "shell/mksh"],
 		docs: {
 			description:
 				"Require quoting parameter expansions and command substitutions that are subject to word splitting",
