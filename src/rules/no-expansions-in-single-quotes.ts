@@ -15,7 +15,7 @@ const EXPANSION_LIKE = /\$[A-Za-z_{(]|`[^`]+`/u;
 const rule: ShellRuleDefinition<{ MessageIds: "expansionInSingleQuotes" }> = {
 	meta: {
 		type: "suggestion",
-		languages: ["shell/bash"],
+		languages: ["shell/bash", "shell/posix", "shell/mksh"],
 		docs: {
 			description:
 				"Disallow expansion-like syntax inside single quotes, where it is not expanded",
