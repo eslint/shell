@@ -5,7 +5,7 @@
 
 import { describe, expect, it } from "vitest";
 import { Linter } from "eslint";
-import bash from "../src/index.js";
+import shell from "../src/index.js";
 import testPlugin from "./fixtures/test-plugin.js";
 
 function lint(
@@ -20,8 +20,8 @@ function lint(
 		[
 			{
 				files: ["**/*.sh"],
-				plugins: { bash, test: testPlugin },
-				language: "bash/bash",
+				plugins: { shell, test: testPlugin },
+				language: "shell/bash",
 				rules: rules as never,
 				...(languageOptions ? { languageOptions } : {}),
 			},
@@ -107,7 +107,7 @@ describe("recommended configuration", () => {
 		const linter = new Linter();
 		const messages = linter.verify(
 			"if then fi\n",
-			[bash.configs.recommended] as never,
+			[shell.configs.recommended] as never,
 			"script.sh",
 		);
 
@@ -119,7 +119,7 @@ describe("recommended configuration", () => {
 		const linter = new Linter();
 		const messages = linter.verify(
 			"if then fi\n",
-			[bash.configs.recommended] as never,
+			[shell.configs.recommended] as never,
 			"script.bash",
 		);
 
@@ -130,7 +130,7 @@ describe("recommended configuration", () => {
 		// Valid JavaScript but invalid Bash, so only a Bash parse fails.
 		const code = "if (ready) {}\n";
 		const linter = new Linter();
-		const config = [bash.configs.recommended] as never;
+		const config = [shell.configs.recommended] as never;
 
 		expect(linter.verify(code, config, "script.sh")[0]?.fatal).toBe(true);
 		expect(linter.verify(code, config, "script.js")).toEqual([]);
