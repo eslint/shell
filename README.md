@@ -30,6 +30,23 @@ export default [
 ];
 ```
 
+Or configure it manually:
+
+```js
+import shell from "@eslint/shell";
+
+export default [
+	{
+		files: ["**/*.sh"],
+		plugins: { shell },
+		language: "shell/bash",
+		rules: {
+			"shell/no-backticks": "error",
+		},
+	},
+];
+```
+
 ### Languages
 
 The plugin provides one language per shell dialect:
@@ -49,6 +66,7 @@ export default [
 		files: ["**/*.sh"],
 		plugins: { shell },
 		language: "shell/posix",
+		rules: { "shell/no-backticks": "error" },
 	},
 ];
 ```
@@ -61,6 +79,14 @@ export default [
 
 Each language sets `variant` to its own dialect, so you only need this option
 to override the dialect of the language you chose.
+
+## Rules
+
+Each rule mirrors a well-known ShellCheck check.
+
+| Rule                                           | ShellCheck | Description                              | Fixable | Recommended |
+| ---------------------------------------------- | ---------- | ---------------------------------------- | ------- | ----------- |
+| [`no-backticks`](./docs/rules/no-backticks.md) | SC2006     | Use `$(...)` instead of legacy backticks | ✅      | error       |
 
 ## Configuration comments
 
