@@ -1,6 +1,11 @@
 /**
  * @fileoverview Tests for rule helper utilities.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { describe, expect, it } from "vitest";
 import { parseShell } from "../parser/parse.js";
@@ -11,6 +16,10 @@ import {
 	isCommandNamed,
 } from "./utils.js";
 import type { CommandNode, WordNode } from "../types.js";
+
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
 
 function firstCommand(text: string): CommandNode {
 	return parseShell(text).ast.body[0] as CommandNode;
@@ -25,6 +34,10 @@ function firstArgument(text: string): WordNode {
 
 	return word;
 }
+
+//------------------------------------------------------------------------------
+// Tests
+//------------------------------------------------------------------------------
 
 describe("getStaticText", () => {
 	it("should return plain literal text", () => {
