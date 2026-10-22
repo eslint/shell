@@ -1,0 +1,50 @@
+name: CI
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+permissions:
+    contents: read
+
+jobs:
+    verify:
+        name: Lint & Format
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v7
+            - uses: actions/setup-node@v7
+              with:
+                  node-version: lts/*
+            - run: npm install
+            - run: npm run fmt:check
+            - run: npm run lint
+
+    test:
+        name: Test (Node ${{ matrix.node }} on ${{ matrix.os }})
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ubuntu-latest]
+                node: [26.x, 25.x, 24.x, 22.x, 20.x, "20.19.0"]
+                include:
+                    - os: windows-latest
+                      node: "lts/*"
+                    - os: macOS-latest
+                      node: "lts/*"
+        steps:
+            - uses: actions/checkout@v7
+            - uses: actions/setup-node@v7
+              with:
+                  node-version: ${{ matrix.node }}
+              # npm 10.9 and 11.5 and earlier fail to resolve this peer
+              # dependency graph ("Cannot read properties of null (reading
+              # 'edgesOut')"), and npm 12 does not support all of the Node.js
+              # versions in this matrix, so pin to the latest npm 11.
+            - run: npm install -g npm@11
+            - run: npm install
+            - run: npm run build
+            - run: npm test
