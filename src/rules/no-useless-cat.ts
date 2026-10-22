@@ -1,10 +1,19 @@
 /**
  * @fileoverview Rule to disallow piping from a single-file `cat`.
  * Mirrors ShellCheck SC2002.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { getCommandName, getStaticText } from "./utils.js";
 import type { ShellRuleDefinition, WordNode, WordPartNode } from "../types.js";
+
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
 
 function hasPotentialExpansion(word: WordNode): boolean {
 	const checkParts = (parts: WordPartNode[], quoted = false): boolean =>
@@ -30,6 +39,10 @@ function hasPotentialExpansion(word: WordNode): boolean {
 
 	return checkParts(word.parts);
 }
+
+//------------------------------------------------------------------------------
+// Rule Definition
+//------------------------------------------------------------------------------
 
 const rule: ShellRuleDefinition<{ MessageIds: "uselessCat" }> = {
 	meta: {
