@@ -1,10 +1,19 @@
 /**
  * @fileoverview Rule to require handling `cd` failure.
  * Mirrors ShellCheck SC2164.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { getCommandName } from "./utils.js";
 import type { ShellRuleDefinition, StatementNode } from "../types.js";
+
+//------------------------------------------------------------------------------
+// Rule Definition
+//------------------------------------------------------------------------------
 
 const rule: ShellRuleDefinition<{
 	MessageIds: "uncheckedCd" | "addGuard";
