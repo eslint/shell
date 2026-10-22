@@ -1,9 +1,18 @@
 /**
  * @fileoverview Rule to require quoting expansions that undergo word
  * splitting and globbing. Mirrors ShellCheck SC2086/SC2046.
+ * @author Claude Opus 5.5
  */
 
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
+
 import type { ShellRuleDefinition, WordNode } from "../types.js";
+
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
 
 /**
  * Parameters that always expand to values that cannot split, so quoting is
@@ -13,6 +22,10 @@ const SAFE_PARAMETERS = new Set(["?", "$", "!", "#", "-"]);
 
 /** Heredoc-style redirect operators whose targets never word-split. */
 const NON_SPLITTING_REDIRECTS = new Set(["<<", "<<-", "<<<"]);
+
+//------------------------------------------------------------------------------
+// Rule Definition
+//------------------------------------------------------------------------------
 
 const rule: ShellRuleDefinition<{
 	MessageIds: "unquotedParameterExpansion" | "unquotedCommandSubstitution";
