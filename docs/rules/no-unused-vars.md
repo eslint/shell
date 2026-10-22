@@ -28,7 +28,7 @@ A variable counts as used when:
 The rule never warns about:
 
 - names that start with `_`;
-- special variables that the shell or common tools read, such as `IFS`, `PATH`, `PS1`, `OPTIND`, `REPLY`, and the `LC_*` variables;
+- special variables that the shell or common tools read, such as `IFS`, `PATH`, `PS1`, `OPTIND`, `REPLY`, and the `LC_*` variables (the same list of variables that [ShellCheck](https://github.com/koalaman/shellcheck/blob/61ceb720d121fb448b4e98bc10a14b756ac4da8c/src/ShellCheck/Data.hs#L27-L70) uses);
 - names listed in the `allowed` option.
 
 If a file uses `eval`, `source` (or `.`), or a nameref (`declare -n`), this rule doesn't report anything in that file, because variables may be read in ways that static analysis can't see.

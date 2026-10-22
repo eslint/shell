@@ -46,6 +46,11 @@ ruleTester.run("no-unused-vars", rule as never, {
 		// Special shell variables configure behavior
 		'IFS=","',
 		"PS1='$ '",
+		"BASH_XTRACEFD=3",
+		"COMPREPLY=(a b)",
+		"TMPDIR=/var/tmp",
+		"FLAGS_HELP='usage: script'",
+		"stderr_lines=()",
 		// Underscore prefix opts out
 		"_unused=1",
 		// The allowed option opts out
@@ -92,6 +97,16 @@ ruleTester.run("no-unused-vars", rule as never, {
 					line: 1,
 					column: 1,
 					endColumn: 7,
+				},
+			],
+		},
+		// Only variables in ShellCheck's list are special
+		{
+			code: "EDITOR=vim",
+			errors: [
+				{
+					messageId: "unusedVariable",
+					data: { name: "EDITOR" },
 				},
 			],
 		},
