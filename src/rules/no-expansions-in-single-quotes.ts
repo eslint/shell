@@ -1,9 +1,18 @@
 /**
  * @fileoverview Rule to flag expansion-like text inside single quotes.
  * Mirrors ShellCheck SC2016.
+ * @author Claude Opus 5.5
  */
 
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
+
 import type { ShellRuleDefinition } from "../types.js";
+
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
 
 /**
  * Matches text that looks like an intended expansion: `$name`, `${...}`,
@@ -11,6 +20,10 @@ import type { ShellRuleDefinition } from "../types.js";
  * excluded because they are common in awk/sed programs.
  */
 const EXPANSION_LIKE = /\$[A-Za-z_{(]|`[^`]+`/u;
+
+//------------------------------------------------------------------------------
+// Rule Definition
+//------------------------------------------------------------------------------
 
 const rule: ShellRuleDefinition<{ MessageIds: "expansionInSingleQuotes" }> = {
 	meta: {
