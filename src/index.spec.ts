@@ -46,6 +46,7 @@ describe("plugin", () => {
 		expect(ruleIds.sort()).toEqual([
 			"no-backticks",
 			"no-expansions-in-single-quotes",
+			"no-unquoted-expansions",
 		]);
 	});
 
