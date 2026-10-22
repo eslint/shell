@@ -12,6 +12,7 @@ import { ShellLanguage } from "./languages/shell-language.js";
 import noBackticks from "./rules/no-backticks.js";
 import noExpansionsInSingleQuotes from "./rules/no-expansions-in-single-quotes.js";
 import noUnquotedExpansions from "./rules/no-unquoted-expansions.js";
+import noUselessEcho from "./rules/no-useless-echo.js";
 
 //------------------------------------------------------------------------------
 // Plugin
@@ -21,6 +22,7 @@ const rules = {
 	"no-backticks": noBackticks,
 	"no-expansions-in-single-quotes": noExpansionsInSingleQuotes,
 	"no-unquoted-expansions": noUnquotedExpansions,
+	"no-useless-echo": noUselessEcho,
 };
 
 const plugin = {
@@ -45,6 +47,7 @@ const plugin = {
 				"shell/no-backticks": "error",
 				"shell/no-expansions-in-single-quotes": "warn",
 				"shell/no-unquoted-expansions": "error",
+				"shell/no-useless-echo": "error",
 			},
 		},
 	},
