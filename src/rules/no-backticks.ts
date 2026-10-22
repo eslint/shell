@@ -1,9 +1,18 @@
 /**
  * @fileoverview Rule to disallow legacy backtick command substitution.
  * Mirrors ShellCheck SC2006.
+ * @author Claude Opus 5.5
  */
 
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
+
 import type { ShellRuleDefinition } from "../types.js";
+
+//------------------------------------------------------------------------------
+// Rule Definition
+//------------------------------------------------------------------------------
 
 const rule: ShellRuleDefinition<{ MessageIds: "useDollarParen" }> = {
 	meta: {

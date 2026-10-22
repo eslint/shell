@@ -1,10 +1,19 @@
 /**
  * @fileoverview Integration tests for autofixing through the Linter API.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { describe, expect, it } from "vitest";
 import { Linter } from "eslint";
 import shell from "../src/index.js";
+
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
 
 function fix(code: string, rules: Record<string, unknown>): Linter.FixReport {
 	const linter = new Linter();
@@ -22,6 +31,10 @@ function fix(code: string, rules: Record<string, unknown>): Linter.FixReport {
 		"script.sh",
 	);
 }
+
+//------------------------------------------------------------------------------
+// Tests
+//------------------------------------------------------------------------------
 
 describe("autofix", () => {
 	it("should fix backticks to $()", () => {

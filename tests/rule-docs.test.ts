@@ -1,17 +1,30 @@
 /**
  * @fileoverview Verifies that every rule has documentation in docs/rules
  * and that the examples in it behave as documented.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { Linter } from "eslint";
 import shell from "../src/index.js";
 
+//------------------------------------------------------------------------------
+// Type Definitions
+//------------------------------------------------------------------------------
+
 interface Example {
 	kind: "incorrect" | "correct";
 	code: string;
 }
+
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
 
 const CONFIG_COMMENT = /^# eslint shell\//u;
 
@@ -45,6 +58,10 @@ function lint(code: string): Linter.LintMessage[] {
 		"example.sh",
 	);
 }
+
+//------------------------------------------------------------------------------
+// Tests
+//------------------------------------------------------------------------------
 
 describe("rule documentation", () => {
 	for (const [ruleId, rule] of Object.entries(shell.rules)) {
