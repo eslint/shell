@@ -1,10 +1,19 @@
 /**
  * @fileoverview Tests for the no-unused-vars rule.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { RuleTester } from "eslint";
 import { ShellLanguage } from "../languages/shell-language.js";
 import rule from "./no-unused-vars.js";
+
+//------------------------------------------------------------------------------
+// Tests
+//------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({
 	plugins: {

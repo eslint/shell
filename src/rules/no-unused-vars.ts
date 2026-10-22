@@ -1,7 +1,12 @@
 /**
  * @fileoverview Rule to flag variables that are assigned but never used.
  * Mirrors ShellCheck SC2034.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { getCommandName, getStaticText } from "./utils.js";
 import type {
@@ -11,6 +16,10 @@ import type {
 	TestExpressionNode,
 	WordNode,
 } from "../types.js";
+
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
 
 /** Variables that are meaningful to the shell or to common external tools. */
 const SPECIAL_VARIABLES = new Set([
@@ -64,6 +73,10 @@ const ARITHMETIC_TEST_OPERATORS = new Set([
 
 /** Arithmetic operators that assign to their left operand. */
 const ARITHMETIC_ASSIGNMENT = /^(?:=|\+=|-=|\*=|\/=|%=|<<=|>>=|&=|\^=|\|=)$/u;
+
+//------------------------------------------------------------------------------
+// Rule Definition
+//------------------------------------------------------------------------------
 
 const rule: ShellRuleDefinition<{
 	MessageIds: "unusedVariable";
