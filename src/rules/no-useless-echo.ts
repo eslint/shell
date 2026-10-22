@@ -1,10 +1,19 @@
 /**
  * @fileoverview Rule to disallow `$(echo ...)` command substitutions.
  * Mirrors ShellCheck SC2116.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { isCommandNamed } from "./utils.js";
 import type { ShellRuleDefinition } from "../types.js";
+
+//------------------------------------------------------------------------------
+// Rule Definition
+//------------------------------------------------------------------------------
 
 const rule: ShellRuleDefinition<{ MessageIds: "uselessEcho" }> = {
 	meta: {

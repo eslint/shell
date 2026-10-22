@@ -1,10 +1,19 @@
 /**
  * @fileoverview Tests for the no-useless-echo rule.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { RuleTester } from "eslint";
 import { ShellLanguage } from "../languages/shell-language.js";
 import rule from "./no-useless-echo.js";
+
+//------------------------------------------------------------------------------
+// Tests
+//------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({
 	plugins: {
