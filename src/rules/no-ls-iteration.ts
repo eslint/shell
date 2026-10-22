@@ -1,10 +1,19 @@
 /**
  * @fileoverview Rule to disallow iterating over `ls` output.
  * Mirrors ShellCheck SC2045.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { startsWithCommand } from "./utils.js";
 import type { ShellRuleDefinition } from "../types.js";
+
+//------------------------------------------------------------------------------
+// Rule Definition
+//------------------------------------------------------------------------------
 
 const rule: ShellRuleDefinition<{ MessageIds: "lsIteration" }> = {
 	meta: {
