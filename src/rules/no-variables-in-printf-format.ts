@@ -1,10 +1,19 @@
 /**
  * @fileoverview Rule to disallow variables in the printf format string.
  * Mirrors ShellCheck SC2059.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { getCommandName, getExpansions, getStaticText } from "./utils.js";
 import type { ShellRuleDefinition } from "../types.js";
+
+//------------------------------------------------------------------------------
+// Rule Definition
+//------------------------------------------------------------------------------
 
 const rule: ShellRuleDefinition<{ MessageIds: "variableInFormat" }> = {
 	meta: {

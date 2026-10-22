@@ -1,10 +1,19 @@
 /**
  * @fileoverview Tests for the no-variables-in-printf-format rule.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { RuleTester } from "eslint";
 import { ShellLanguage } from "../languages/shell-language.js";
 import rule from "./no-variables-in-printf-format.js";
+
+//------------------------------------------------------------------------------
+// Tests
+//------------------------------------------------------------------------------
 
 const ruleTester = new RuleTester({
 	plugins: {
