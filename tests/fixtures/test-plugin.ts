@@ -1,9 +1,18 @@
 /**
  * @fileoverview A test-only plugin with rules that exercise the shell
  * language independently of the rules shipped by the plugin.
+ * @author Claude Opus 5.5
  */
 
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
+
 import type { ShellRuleDefinition, CommandNode } from "../../src/index.js";
+
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
 
 /**
  * Creates a rule that reports every simple command with the given name.
@@ -36,6 +45,10 @@ function createCommandRule(
 		},
 	};
 }
+
+//------------------------------------------------------------------------------
+// Exports
+//------------------------------------------------------------------------------
 
 export default {
 	rules: {

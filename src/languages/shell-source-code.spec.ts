@@ -1,17 +1,30 @@
 /**
  * @fileoverview Unit tests for ShellSourceCode.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { describe, expect, it } from "vitest";
 import { parseShell } from "../parser/parse.js";
 import { ShellSourceCode } from "./shell-source-code.js";
 import type { CommandNode, ProgramNode } from "../types.js";
 
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
+
 function createSourceCode(text: string): ShellSourceCode {
 	const { ast } = parseShell(text);
 
 	return new ShellSourceCode({ text, ast });
 }
+
+//------------------------------------------------------------------------------
+// Tests
+//------------------------------------------------------------------------------
 
 describe("ShellSourceCode", () => {
 	describe("basics", () => {

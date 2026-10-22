@@ -1,12 +1,21 @@
 /**
  * @fileoverview Integration tests running the plugin through the ESLint
  * Linter API.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { describe, expect, it } from "vitest";
 import { Linter } from "eslint";
 import shell from "../src/index.js";
 import testPlugin from "./fixtures/test-plugin.js";
+
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
 
 function lint(
 	code: string,
@@ -30,6 +39,10 @@ function lint(
 		"script.sh",
 	);
 }
+
+//------------------------------------------------------------------------------
+// Tests
+//------------------------------------------------------------------------------
 
 describe("language integration", () => {
 	it("should lint a clean script without messages", () => {

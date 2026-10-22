@@ -1,7 +1,12 @@
 /**
  * @fileoverview Visitor keys describing the traversal order of the shell
  * syntax tree. Keys are listed in source order.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Exports
+//------------------------------------------------------------------------------
 
 export const visitorKeys: Record<string, string[]> = Object.freeze({
 	Program: ["body"],

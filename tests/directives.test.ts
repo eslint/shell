@@ -1,11 +1,20 @@
 /**
  * @fileoverview Integration tests for inline configuration comments.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { describe, expect, it } from "vitest";
 import { Linter } from "eslint";
 import shell from "../src/index.js";
 import testPlugin from "./fixtures/test-plugin.js";
+
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
 
 function lint(
 	code: string,
@@ -28,6 +37,10 @@ function lint(
 		"script.sh",
 	);
 }
+
+//------------------------------------------------------------------------------
+// Tests
+//------------------------------------------------------------------------------
 
 describe("disable directives", () => {
 	it("should honor eslint-disable-next-line", () => {

@@ -1,7 +1,12 @@
 /**
  * @fileoverview The ShellSourceCode class, the SourceCode implementation that
  * ESLint uses to interact with a parsed shell script.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import {
 	ConfigCommentParser,
@@ -25,6 +30,19 @@ import type {
 	ProgramNode,
 } from "../types.js";
 
+//------------------------------------------------------------------------------
+// Type Definitions
+//------------------------------------------------------------------------------
+
+export interface ShellSourceCodeOptions {
+	text: string;
+	ast: ProgramNode;
+}
+
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
+
 const commentParser = new ConfigCommentParser();
 
 const INLINE_CONFIG =
@@ -40,10 +58,9 @@ const DIRECTIVE_TYPES = new Map<string, DirectiveType>([
 	["eslint-disable-next-line", "disable-next-line"],
 ]);
 
-export interface ShellSourceCodeOptions {
-	text: string;
-	ast: ProgramNode;
-}
+//------------------------------------------------------------------------------
+// Exports
+//------------------------------------------------------------------------------
 
 /**
  * SourceCode implementation for shell scripts. Nodes carry `start`/`end`

@@ -1,11 +1,20 @@
 /**
  * @fileoverview Unit tests for ShellLanguage.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { describe, expect, it } from "vitest";
 import { ShellLanguage } from "./shell-language.js";
 import { ShellSourceCode } from "./shell-source-code.js";
 import type { File } from "@eslint/core";
+
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
 
 function createFile(body: string): File {
 	return {
@@ -15,6 +24,10 @@ function createFile(body: string): File {
 		body,
 	};
 }
+
+//------------------------------------------------------------------------------
+// Tests
+//------------------------------------------------------------------------------
 
 describe("ShellLanguage", () => {
 	const language = new ShellLanguage();

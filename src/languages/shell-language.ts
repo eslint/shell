@@ -1,7 +1,12 @@
 /**
  * @fileoverview The ShellLanguage class, the ESLint Language implementation
  * for shell scripts.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import type {
 	File,
@@ -21,7 +26,9 @@ import type {
 	ProgramNode,
 } from "../types.js";
 
-const SHELL_VARIANTS = new Set(["bash", "posix", "mksh"]);
+//------------------------------------------------------------------------------
+// Type Definitions
+//------------------------------------------------------------------------------
 
 export type ShellOkParseResult = OkParseResult<ProgramNode> & {
 	comments: CommentNode[];
@@ -31,6 +38,16 @@ export interface ShellLanguageConstructorOptions {
 	/** The shell dialect this language parses. Defaults to `"bash"`. */
 	variant?: ShellVariant;
 }
+
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
+
+const SHELL_VARIANTS = new Set(["bash", "posix", "mksh"]);
+
+//------------------------------------------------------------------------------
+// Exports
+//------------------------------------------------------------------------------
 
 /**
  * ESLint Language implementation for shell scripts.

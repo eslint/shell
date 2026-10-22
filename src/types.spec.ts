@@ -1,6 +1,11 @@
 /**
  * @fileoverview Type-level tests for the syntax tree definitions.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { describe, expectTypeOf, it } from "vitest";
 import type {
@@ -11,6 +16,10 @@ import type {
 	StatementNode,
 	WordPartNode,
 } from "./types.js";
+
+//------------------------------------------------------------------------------
+// Tests
+//------------------------------------------------------------------------------
 
 describe("types", () => {
 	it("should type Program nodes", () => {
