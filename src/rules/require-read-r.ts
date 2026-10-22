@@ -1,12 +1,25 @@
 /**
  * @fileoverview Rule to require the `-r` flag when using `read`.
  * Mirrors ShellCheck SC2162.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { getCommandName, getStaticText } from "./utils.js";
 import type { ShellRuleDefinition } from "../types.js";
 
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
+
 const optionsWithArguments = new Set(["a", "d", "i", "n", "N", "p", "t", "u"]);
+
+//------------------------------------------------------------------------------
+// Rule Definition
+//------------------------------------------------------------------------------
 
 const rule: ShellRuleDefinition<{ MessageIds: "missingR" }> = {
 	meta: {
