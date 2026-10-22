@@ -3,7 +3,12 @@
  * a GopherJS build of mvdan.cc/sh. Only the surface used by this package is
  * declared. Struct fields are exposed as properties and positions as
  * method-bearing objects.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Type Definitions
+//------------------------------------------------------------------------------
 
 declare module "mvdan-sh" {
 	interface MvdanPos {
