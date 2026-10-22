@@ -9,6 +9,7 @@
 // Imports
 //------------------------------------------------------------------------------
 
+import type { LanguageOptions } from "@eslint/core";
 import type {
 	CustomRuleDefinitionType,
 	CustomRuleTypeDefinitions,
@@ -450,11 +451,9 @@ export type ShellNode =
 
 export type ShellVariant = "bash" | "posix" | "mksh";
 
-export interface ShellLanguageOptions {
+export interface ShellLanguageOptions extends LanguageOptions {
 	/** The shell dialect to parse. Defaults to the variant of the language in use. */
 	variant?: ShellVariant;
-
-	[key: string]: unknown;
 }
 
 //------------------------------------------------------------------------------
