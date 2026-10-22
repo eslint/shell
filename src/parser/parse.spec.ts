@@ -1,6 +1,11 @@
 /**
  * @fileoverview Unit tests for the shell parser wrapper.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import { describe, expect, it } from "vitest";
 import { ShellSyntaxError, parseShell } from "./parse.js";
@@ -33,6 +38,10 @@ import type {
 	WordNode,
 } from "../types.js";
 
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
+
 /** Convenience helper returning the first statement of a parse. */
 function first<T>(text: string): T {
 	return parseShell(text).ast.body[0] as T;
@@ -48,6 +57,10 @@ function arg(command: CommandNode, index: number): WordNode {
 
 	return word;
 }
+
+//------------------------------------------------------------------------------
+// Tests
+//------------------------------------------------------------------------------
 
 describe("parseShell", () => {
 	describe("programs", () => {

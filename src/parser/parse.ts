@@ -2,7 +2,12 @@
  * @fileoverview Parses shell source code into an ESTree-style syntax tree by
  * wrapping the mvdan-sh parser (a GopherJS build of mvdan.cc/sh) and
  * translating its tree. See docs/syntax-tree.md for the tree format.
+ * @author Claude Opus 5.5
  */
+
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
 
 import mvdan from "mvdan-sh";
 import type {

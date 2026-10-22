@@ -1,6 +1,7 @@
 /**
  * @fileoverview Type definitions for the shell ESTree-style syntax tree. See
  * docs/syntax-tree.md for the full documentation of the tree format.
+ * @author Claude Opus 5.5
  */
 
 //------------------------------------------------------------------------------
