@@ -14,6 +14,7 @@ import noLsIteration from "./rules/no-ls-iteration.js";
 import noUnquotedExpansions from "./rules/no-unquoted-expansions.js";
 import noUselessCat from "./rules/no-useless-cat.js";
 import noUselessEcho from "./rules/no-useless-echo.js";
+import noVariablesInPrintfFormat from "./rules/no-variables-in-printf-format.js";
 import requireCdGuard from "./rules/require-cd-guard.js";
 import requireReadR from "./rules/require-read-r.js";
 
@@ -24,6 +25,7 @@ const rules = {
 	"no-unquoted-expansions": noUnquotedExpansions,
 	"no-useless-cat": noUselessCat,
 	"no-useless-echo": noUselessEcho,
+	"no-variables-in-printf-format": noVariablesInPrintfFormat,
 	"require-cd-guard": requireCdGuard,
 	"require-read-r": requireReadR,
 };
@@ -53,6 +55,7 @@ const plugin = {
 				"shell/no-unquoted-expansions": "error",
 				"shell/no-useless-cat": "error",
 				"shell/no-useless-echo": "error",
+				"shell/no-variables-in-printf-format": "error",
 				"shell/require-cd-guard": "error",
 				"shell/require-read-r": "error",
 			},
