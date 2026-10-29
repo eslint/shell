@@ -42,6 +42,7 @@ export default [
 		language: "shell/bash",
 		rules: {
 			"shell/no-backticks": "error",
+			"shell/no-unquoted-expansions": "error",
 		},
 	},
 ];
@@ -72,10 +73,11 @@ export default [
 
 Each rule mirrors a well-known ShellCheck check.
 
-| Rule                                                                               | ShellCheck | Description                               | Fixable | Recommended |
-| ---------------------------------------------------------------------------------- | ---------- | ----------------------------------------- | ------- | ----------- |
-| [`no-backticks`](./docs/rules/no-backticks.md)                                     | SC2006     | Use `$(...)` instead of legacy backticks  | ✅      | error       |
-| [`no-expansions-in-single-quotes`](./docs/rules/no-expansions-in-single-quotes.md) | SC2016     | Expressions don't expand in single quotes |         | warn        |
+| Rule                                                                               | ShellCheck | Description                                             | Fixable | Recommended |
+| ---------------------------------------------------------------------------------- | ---------- | ------------------------------------------------------- | ------- | ----------- |
+| [`no-backticks`](./docs/rules/no-backticks.md)                                     | SC2006     | Use `$(...)` instead of legacy backticks                | ✅      | error       |
+| [`no-expansions-in-single-quotes`](./docs/rules/no-expansions-in-single-quotes.md) | SC2016     | Expressions don't expand in single quotes               |         | warn        |
+| [`no-unquoted-expansions`](./docs/rules/no-unquoted-expansions.md)                 | SC2086/46  | Quote expansions subject to word splitting and globbing | ✅      | error       |
 
 ## Configuration comments
 
