@@ -159,3 +159,93 @@ describe("recommended configuration", () => {
 		);
 	});
 });
+
+describe("shipped rules", () => {
+	it("should run multiple rules together", () => {
+		const messages = lint(
+			[
+				"cd /var/log",
+				"for f in $(ls); do",
+				"  echo $f",
+				"done",
+				"cat error.log | grep error",
+				"",
+			].join("\n"),
+			{
+				"shell/require-cd-guard": "error",
+				"shell/no-ls-iteration": "error",
+				"shell/no-unquoted-expansions": "error",
+				"shell/no-useless-cat": "error",
+			},
+		);
+		const ruleIds = new Set(messages.map(message => message.ruleId));
+
+		expect(ruleIds).toEqual(
+			new Set([
+				"shell/no-ls-iteration",
+				"shell/no-unquoted-expansions",
+				"shell/no-useless-cat",
+				"shell/require-cd-guard",
+			]),
+		);
+	});
+
+	it("should report rules from the recommended config", () => {
+		const linter = new Linter();
+		const messages = linter.verify(
+			"echo `pwd`\n",
+			[shell.configs.recommended] as never,
+			"script.sh",
+		);
+
+		expect(
+			messages.some(message => message.ruleId === "shell/no-backticks"),
+		).toBe(true);
+	});
+
+	it("should flag a script with typical ShellCheck findings", () => {
+		const linter = new Linter();
+		const code = [
+			"#!/bin/bash",
+			"unused=1",
+			"cd /tmp",
+			"read input",
+			"echo $input",
+			"",
+		].join("\n");
+		const messages = linter.verify(
+			code,
+			[shell.configs.recommended] as never,
+			"script.sh",
+		);
+		const ruleIds = new Set(messages.map(message => message.ruleId));
+
+		expect(ruleIds).toContain("shell/no-unused-vars");
+		expect(ruleIds).toContain("shell/require-cd-guard");
+		expect(ruleIds).toContain("shell/require-read-r");
+		expect(ruleIds).toContain("shell/no-unquoted-expansions");
+	});
+
+	it("should not report a well-written script", () => {
+		const linter = new Linter();
+		const code = [
+			"#!/bin/bash",
+			"set -euo pipefail",
+			'cd "$(dirname "$0")" || exit',
+			"while read -r line; do",
+			"  printf '%s\\n' \"$line\"",
+			"done < input.txt",
+			"for f in *.txt; do",
+			'  echo "$f"',
+			"done",
+			"",
+		].join("\n");
+		const messages = linter.verify(
+			code,
+			[shell.configs.recommended] as never,
+			"script.sh",
+		);
+
+		expect(messages).toEqual([]);
+	});
+});
