@@ -79,11 +79,20 @@ Each rule mirrors a well-known ShellCheck check.
 | [`no-expansions-in-single-quotes`](./docs/rules/no-expansions-in-single-quotes.md) | SC2016     | Expressions don't expand in single quotes               |         | warn        |
 | [`no-ls-iteration`](./docs/rules/no-ls-iteration.md)                               | SC2045     | Don't iterate over `ls` output; use globs               |         | error       |
 | [`no-unquoted-expansions`](./docs/rules/no-unquoted-expansions.md)                 | SC2086/46  | Quote expansions subject to word splitting and globbing | ✅      | error       |
+| [`no-unused-vars`](./docs/rules/no-unused-vars.md)                                 | SC2034     | Disallow variables that are assigned but never used     |         | error       |
 | [`no-useless-cat`](./docs/rules/no-useless-cat.md)                                 | SC2002     | Don't pipe from a single-file `cat`                     |         | error       |
 | [`no-useless-echo`](./docs/rules/no-useless-echo.md)                               | SC2116     | Disallow `$(echo ...)`                                  |         | error       |
 | [`no-variables-in-printf-format`](./docs/rules/no-variables-in-printf-format.md)   | SC2059     | Don't put variables in the `printf` format string       |         | error       |
 | [`require-cd-guard`](./docs/rules/require-cd-guard.md)                             | SC2164     | Handle `cd` failure with `\|\| exit` (has suggestions)  |         | error       |
 | [`require-read-r`](./docs/rules/require-read-r.md)                                 | SC2162     | Use `read -r` so backslashes aren't mangled             | ✅      | error       |
+
+### Rule options
+
+`shell/no-unused-vars` accepts an object option:
+
+```js
+"shell/no-unused-vars": ["error", { allowed: ["MY_GLOBAL"] }]
+```
 
 ## Configuration comments
 
