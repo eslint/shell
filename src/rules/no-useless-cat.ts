@@ -3,8 +3,16 @@
  * Mirrors ShellCheck SC2002.
  */
 
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
+
 import { getCommandName, getStaticText } from "./utils.js";
 import type { ShellRuleDefinition, WordNode, WordPartNode } from "../types.js";
+
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
 
 function hasPotentialExpansion(word: WordNode): boolean {
 	const checkParts = (parts: WordPartNode[], quoted = false): boolean =>
@@ -30,6 +38,10 @@ function hasPotentialExpansion(word: WordNode): boolean {
 
 	return checkParts(word.parts);
 }
+
+//------------------------------------------------------------------------------
+// Rule Definition
+//------------------------------------------------------------------------------
 
 const rule: ShellRuleDefinition<{ MessageIds: "uselessCat" }> = {
 	meta: {

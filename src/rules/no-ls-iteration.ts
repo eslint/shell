@@ -3,8 +3,16 @@
  * Mirrors ShellCheck SC2045.
  */
 
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
+
 import { startsWithCommand } from "./utils.js";
 import type { ShellRuleDefinition } from "../types.js";
+
+//------------------------------------------------------------------------------
+// Rule Definition
+//------------------------------------------------------------------------------
 
 const rule: ShellRuleDefinition<{ MessageIds: "lsIteration" }> = {
 	meta: {

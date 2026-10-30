@@ -2,6 +2,10 @@
  * @fileoverview Shared helpers for shell rules.
  */
 
+//------------------------------------------------------------------------------
+// Imports
+//------------------------------------------------------------------------------
+
 import type {
 	CommandNode,
 	CommandSubstitutionNode,
@@ -10,6 +14,10 @@ import type {
 	WordNode,
 	WordPartNode,
 } from "../types.js";
+
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
 
 /**
  * Returns the plain text of a word when it is fully static (made up only of
