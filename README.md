@@ -28,6 +28,7 @@ import shell from "@eslint/shell";
 export default defineConfig([
 	{
 		// use the recommended rules for *.sh and *.bash files
+		files: ["**/*.sh", "**/*.bash"],
 		plugins: { shell },
 		extends: ["shell/recommended"],
 	},
