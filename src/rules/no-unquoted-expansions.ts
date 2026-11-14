@@ -20,6 +20,12 @@ import { startsWithCommand } from "./utils.js";
  */
 const SAFE_PARAMETERS = new Set(["?", "$", "!", "#", "-"]);
 
+/**
+ * Operators of the "use alternate value" expansion. `${var:+word}` expands
+ * to `word` or to nothing, so it's `word` that needs quoting.
+ */
+const ALTERNATE_VALUE_OPERATORS = new Set(["+", ":+"]);
+
 /** Heredoc-style redirect operators whose targets never word-split. */
 const NON_SPLITTING_REDIRECTS = new Set(["<<", "<<-", "<<<"]);
 
@@ -62,6 +68,17 @@ const rule: ShellRuleDefinition<{
 
 				if (part.type === "ParameterExpansion") {
 					if (part.lengthOf || SAFE_PARAMETERS.has(part.name)) {
+						continue;
+					}
+
+					if (
+						part.operator &&
+						ALTERNATE_VALUE_OPERATORS.has(part.operator)
+					) {
+						if (part.word) {
+							checkWord(part.word, isForWord);
+						}
+
 						continue;
 					}
 				}
