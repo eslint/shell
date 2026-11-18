@@ -56,7 +56,7 @@ export class ShellLanguage implements Language<{
 		this.#mode = mode;
 	}
 
-	validateLanguageOptions(): void {
+	validateLanguageOptions(_languageOptions?: ShellLanguageOptions): void {
 		// There are no language options to validate.
 	}
 

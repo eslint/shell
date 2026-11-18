@@ -42,7 +42,8 @@
     "fmt:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:types": "tsc -p tsconfig.json"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
