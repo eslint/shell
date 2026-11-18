@@ -56,11 +56,7 @@ export class ShellLanguage implements Language<{
 		this.#mode = mode;
 	}
 
-	/* eslint-disable-next-line @typescript-eslint/no-unused-vars --
-	 * Keep this parameter for type consistency with other language plugins
-	 * until validation is implemented.
-	 */
-	validateLanguageOptions(languageOptions: ShellLanguageOptions): void {
+	validateLanguageOptions(_languageOptions?: ShellLanguageOptions): void {
 		// There are no language options to validate.
 	}
 
