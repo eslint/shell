@@ -3,6 +3,10 @@
  * for shell scripts.
  */
 
+//------------------------------------------------------------------------------
+// Import
+//------------------------------------------------------------------------------
+
 import type { File, Language, OkParseResult, ParseResult } from "@eslint/core";
 import { ShellSyntaxError, parseShell } from "../parser/parse.js";
 import { ShellSourceCode } from "./shell-source-code.js";
@@ -15,16 +19,34 @@ import type {
 	ProgramNode,
 } from "../types.js";
 
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
+
 const SHELL_MODES = new Set(["bash", "posix", "mksh"]);
 
+//------------------------------------------------------------------------------
+// Types
+//------------------------------------------------------------------------------
+
+/**
+ * Options for creating a shell language instance.
+ */
 export interface ShellLanguageConstructorOptions {
 	/** The shell dialect to parse. Defaults to `"bash"`. */
 	mode?: ShellVariant;
 }
 
+/**
+ * A successful parse containing the shell AST and its comments.
+ */
 export type ShellOkParseResult = OkParseResult<ProgramNode> & {
 	comments: CommentNode[];
 };
+
+//------------------------------------------------------------------------------
+// Exports
+//------------------------------------------------------------------------------
 
 /**
  * ESLint Language implementation for shell scripts. Each instance parses
@@ -36,16 +58,47 @@ export class ShellLanguage implements Language<{
 	RootNode: ProgramNode;
 	Node: ShellNode;
 }> {
+	/**
+	 * The type of file to read.
+	 */
 	fileType = "text" as const;
+
+	/**
+	 * The line number at which the parser starts counting.
+	 */
 	lineStart = 1 as const;
+
+	/**
+	 * The column number at which the parser starts counting.
+	 */
 	columnStart = 1 as const;
+
+	/**
+	 * The name of the key that holds the type of the node.
+	 */
 	nodeTypeKey = "type";
+
+	/**
+	 * The child properties to visit for each shell node type, in traversal order.
+	 */
 	visitorKeys = visitorKeys;
 
+	/**
+	 * Default language options. User-defined options are merged with this object.
+	 */
 	defaultLanguageOptions: ShellLanguageOptions = {};
 
+	/**
+	 * The shell parser mode.
+	 */
 	#mode: ShellVariant;
 
+	/**
+	 * Creates a new instance.
+	 * @param [options] The options to use for this instance.
+	 * @param [options.mode] The shell parser mode to use.
+	 * @throws {TypeError} When the requested dialect is unsupported.
+	 */
 	constructor({ mode = "bash" }: ShellLanguageConstructorOptions = {}) {
 		if (!SHELL_MODES.has(mode)) {
 			throw new TypeError(
@@ -56,10 +109,18 @@ export class ShellLanguage implements Language<{
 		this.#mode = mode;
 	}
 
+	/**
+	 * Validates the language options.
+	 */
 	validateLanguageOptions(): void {
 		// There are no language options to validate.
 	}
 
+	/**
+	 * Parses the given file into an AST.
+	 * @param file The virtual file to parse.
+	 * @returns The result of parsing.
+	 */
 	parse(file: File): ParseResult<ProgramNode> {
 		const text = file.body as string;
 
@@ -100,6 +161,12 @@ export class ShellLanguage implements Language<{
 		}
 	}
 
+	/**
+	 * Creates a new `ShellSourceCode` object from the given information.
+	 * @param file The virtual file to create a `ShellSourceCode` object from.
+	 * @param parseResult The result returned from `parse()`.
+	 * @returns The new `ShellSourceCode` object.
+	 */
 	createSourceCode(
 		file: File,
 		parseResult: ShellOkParseResult,
