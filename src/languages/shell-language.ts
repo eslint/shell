@@ -112,7 +112,7 @@ export class ShellLanguage implements Language<{
 	/**
 	 * Validates the language options.
 	 */
-	validateLanguageOptions(): void {
+	validateLanguageOptions(_languageOptions?: ShellLanguageOptions): void {
 		// There are no language options to validate.
 	}
 
