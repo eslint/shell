@@ -2,6 +2,7 @@
   "name": "@eslint/shell",
   "version": "0.1.2",
   "description": "Shell language plugin for ESLint",
+  "author": "Nicholas C. Zakas",
   "license": "Apache-2.0",
   "type": "module",
   "main": "dist/index.js",
@@ -24,6 +25,10 @@
     "type": "git",
     "url": "git+https://github.com/eslint/shell.git"
   },
+  "bugs": {
+    "url": "https://github.com/eslint/shell/issues"
+  },
+  "homepage": "https://github.com/eslint/shell#readme",
   "keywords": [
     "eslint",
     "eslint-plugin",
