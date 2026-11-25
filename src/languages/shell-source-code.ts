@@ -151,7 +151,7 @@ export class ShellSourceCode extends TextSourceCodeBase<{
 				new VisitNodeStep({
 					target: node,
 					phase: 1,
-					args: [node, parent],
+					args: [node],
 				}),
 			);
 
@@ -173,7 +173,7 @@ export class ShellSourceCode extends TextSourceCodeBase<{
 				new VisitNodeStep({
 					target: node,
 					phase: 2,
-					args: [node, parent],
+					args: [node],
 				}),
 			);
 		};
