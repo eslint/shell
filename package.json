@@ -1,6 +1,6 @@
 {
   "name": "@eslint/shell",
-  "version": "0.1.2",
+  "version": "1.0.0",
   "description": "Shell language plugin for ESLint",
   "author": "Nicholas C. Zakas",
   "license": "Apache-2.0",

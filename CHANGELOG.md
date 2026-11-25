@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.0](https://github.com/eslint/shell/compare/shell-v0.1.2...shell-v1.0.0) (2026-11-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* Stop passing parent to visitor functions during traversal ([#41](https://github.com/eslint/shell/issues/41))
+
+### Bug Fixes
+
+* `validateLanguageOptions` type signature and add type checks ([#34](https://github.com/eslint/shell/issues/34)) ([bbd3fbd](https://github.com/eslint/shell/commit/bbd3fbd3baca11ba9d1261c99596aa7612d3a780))
+* Stop passing parent to visitor functions during traversal ([#41](https://github.com/eslint/shell/issues/41)) ([a9abdd5](https://github.com/eslint/shell/commit/a9abdd5e0ff45e8f533651706c1c95073eebc2d9))
+
 ## [0.1.2](https://github.com/eslint/shell/compare/shell-v0.1.1...shell-v0.1.2) (2026-11-06)
 
 
