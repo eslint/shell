@@ -7,6 +7,7 @@
 //------------------------------------------------------------------------------
 // Plugin
 //------------------------------------------------------------------------------
+
 import { ShellLanguage } from "./languages/shell-language.js";
 import noBackticks from "./rules/no-backticks.js";
 import noExpansionsInSingleQuotes from "./rules/no-expansions-in-single-quotes.js";
