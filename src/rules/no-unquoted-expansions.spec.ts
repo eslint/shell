@@ -49,8 +49,49 @@ ruleTester.run("no-unquoted-expansions", rule as never, {
 		"echo ${var:+--verbose}",
 		"echo ${var:+}",
 		'for f in ${files:+"$files"}; do echo "$f"; done',
+		'echo ${flag:+"two words"}',
+		"echo ${flag:+'two words'}",
+		"echo ${flag:+two\\ words}",
+		'echo ${flag+"*.txt"}',
 	],
 	invalid: [
+		{
+			code: "echo ${flag:+two words}",
+			output: null,
+			errors: [
+				{
+					messageId: "unquotedAlternateValue",
+					data: { expansion: "${flag:+two words}" },
+					line: 1,
+					column: 6,
+					endColumn: 24,
+				},
+			],
+		},
+		{
+			code: "echo ${flag+*.txt}",
+			output: null,
+			errors: [
+				{
+					messageId: "unquotedAlternateValue",
+					data: { expansion: "${flag+*.txt}" },
+				},
+			],
+		},
+		{
+			code: "echo ${flag:+-o $out}",
+			output: null,
+			errors: [
+				{
+					messageId: "unquotedAlternateValue",
+					data: { expansion: "${flag:+-o $out}" },
+				},
+				{
+					messageId: "unquotedParameterExpansion",
+					data: { expansion: "$out" },
+				},
+			],
+		},
 		{
 			code: "echo ${var:+$var}",
 			output: 'echo ${var:+"$var"}',

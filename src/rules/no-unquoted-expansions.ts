@@ -26,6 +26,26 @@ const SAFE_PARAMETERS = new Set(["?", "$", "!", "#", "-"]);
  */
 const ALTERNATE_VALUE_OPERATORS = new Set(["+", ":+"]);
 
+/**
+ * Characters that make unquoted text split (whitespace) or glob (`*`, `?`,
+ * `[`) after expansion.
+ */
+const SPLIT_OR_GLOB_CHARS = /[\s*?[]/u;
+
+/**
+ * Checks whether a word has unquoted text that the shell would split or glob.
+ * Escaped characters such as `\ ` are skipped because they don't split.
+ * @param word The word to check.
+ * @returns `true` if a literal part contains splitting or glob characters.
+ */
+function hasSplittingLiteral(word: WordNode): boolean {
+	return word.parts.some(
+		part =>
+			part.type === "Literal" &&
+			SPLIT_OR_GLOB_CHARS.test(part.value.replace(/\\./gsu, "")),
+	);
+}
+
 /** Heredoc-style redirect operators whose targets never word-split. */
 const NON_SPLITTING_REDIRECTS = new Set(["<<", "<<-", "<<<"]);
 
@@ -34,7 +54,10 @@ const NON_SPLITTING_REDIRECTS = new Set(["<<", "<<-", "<<<"]);
 //------------------------------------------------------------------------------
 
 const rule: ShellRuleDefinition<{
-	MessageIds: "unquotedParameterExpansion" | "unquotedCommandSubstitution";
+	MessageIds:
+		| "unquotedParameterExpansion"
+		| "unquotedCommandSubstitution"
+		| "unquotedAlternateValue";
 }> = {
 	meta: {
 		type: "problem",
@@ -51,6 +74,8 @@ const rule: ShellRuleDefinition<{
 				'Double quote "{{expansion}}" to prevent word splitting and globbing.',
 			unquotedCommandSubstitution:
 				"Quote this command substitution to prevent word splitting.",
+			unquotedAlternateValue:
+				'Double quote the alternate value in "{{expansion}}" to prevent word splitting and globbing.',
 		},
 	},
 
@@ -76,6 +101,18 @@ const rule: ShellRuleDefinition<{
 						ALTERNATE_VALUE_OPERATORS.has(part.operator)
 					) {
 						if (part.word) {
+							// Quoting the whole expansion would change its meaning
+							// when the parameter is unset, so there's no autofix.
+							if (hasSplittingLiteral(part.word)) {
+								context.report({
+									node: part,
+									messageId: "unquotedAlternateValue",
+									data: {
+										expansion: sourceCode.getText(part),
+									},
+								});
+							}
+
 							checkWord(part.word, isForWord);
 						}
 
