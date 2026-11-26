@@ -42,8 +42,101 @@ ruleTester.run("no-unquoted-expansions", rule as never, {
 		"echo $((x + 1))",
 		// Heredoc delimiters and herestrings
 		"cat <<< $var",
+		// Alternate values that are quoted or can't split
+		'echo ${var:+"$var"}',
+		'echo ${var+"$var"}',
+		'echo ${var:+"--name=$var"}',
+		"echo ${var:+--verbose}",
+		"echo ${var:+}",
+		'for f in ${files:+"$files"}; do echo "$f"; done',
+		'echo ${flag:+"two words"}',
+		"echo ${flag:+'two words'}",
+		"echo ${flag:+two\\ words}",
+		'echo ${flag+"*.txt"}',
 	],
 	invalid: [
+		{
+			code: "echo ${flag:+two words}",
+			output: null,
+			errors: [
+				{
+					messageId: "unquotedAlternateValue",
+					data: { expansion: "${flag:+two words}" },
+					line: 1,
+					column: 6,
+					endColumn: 24,
+				},
+			],
+		},
+		{
+			code: "echo ${flag+*.txt}",
+			output: null,
+			errors: [
+				{
+					messageId: "unquotedAlternateValue",
+					data: { expansion: "${flag+*.txt}" },
+				},
+			],
+		},
+		{
+			code: "echo ${flag:+-o $out}",
+			output: null,
+			errors: [
+				{
+					messageId: "unquotedAlternateValue",
+					data: { expansion: "${flag:+-o $out}" },
+				},
+				{
+					messageId: "unquotedParameterExpansion",
+					data: { expansion: "$out" },
+				},
+			],
+		},
+		{
+			code: "echo ${var:+$var}",
+			output: 'echo ${var:+"$var"}',
+			errors: [
+				{
+					messageId: "unquotedParameterExpansion",
+					data: { expansion: "$var" },
+					line: 1,
+					column: 13,
+					endColumn: 17,
+				},
+			],
+		},
+		{
+			code: "echo ${var+$(pwd)}",
+			output: 'echo ${var+"$(pwd)"}',
+			errors: [
+				{
+					messageId: "unquotedCommandSubstitution",
+					line: 1,
+					column: 12,
+					endColumn: 18,
+				},
+			],
+		},
+		{
+			code: "echo ${var:+--name=$var}",
+			output: null,
+			errors: [
+				{
+					messageId: "unquotedParameterExpansion",
+					data: { expansion: "$var" },
+				},
+			],
+		},
+		{
+			code: "echo ${var:-$other}",
+			output: 'echo "${var:-$other}"',
+			errors: [
+				{
+					messageId: "unquotedParameterExpansion",
+					data: { expansion: "${var:-$other}" },
+				},
+			],
+		},
 		{
 			code: "echo $var",
 			output: 'echo "$var"',

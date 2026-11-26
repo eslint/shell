@@ -18,6 +18,7 @@ The rule does not warn about:
 
 - expansions inside double quotes;
 - parameters that can't contain whitespace: `$?`, `$$`, `$!`, `$#`, `$-`, and length expansions such as `${#array[@]}`;
+- alternate value expansions such as `${var:+"$var"}`, which expand to nothing when the parameter is unset. The rule checks the alternate value instead, so `${var:+$var}` is still reported, and so is unquoted text that would split or glob, such as `${var:+two words}` or `${var:+*.txt}`;
 - contexts where the shell doesn't split words: variable assignments (`x=$y`), `[[ ... ]]`, `case` subjects, arithmetic such as `$((...))`, and heredoc or herestring redirects (`<<`, `<<-`, `<<<`).
 
 This rule is autofixable when the expansion is the entire word: `$var` becomes `"$var"`. Words that mix an expansion with other text, such as `prefix$var`, are reported but not fixed.
@@ -62,6 +63,8 @@ echo $? $# ${#items[@]}
 echo $((count + 1))
 
 cat <<< $input
+
+cmd ${name:+"$name"}
 ```
 
 ## Options
